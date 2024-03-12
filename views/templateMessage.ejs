@@ -19,30 +19,37 @@
                                 </div>
 
                                 <style>
-                                    .manageCategoryInTempMSg {
+                                    .manageGroupInTempMSg {
                                         display: flex;
                                         flex-direction: row-reverse;
                                         margin: 5px;
                                     }
 
-                                    .manageCategoryInTempMSg a {
+                                    .manageGroupInTempMSg a {
                                         text-decoration: none;
                                     }
 
-                                    .manageCategoryInTempMSg a:hover {
+                                    .manageGroupInTempMSg a:hover {
                                         color: white;
                                     }
-                                    #manageCategoryBTN{
+                                    #manageGroupBTN{
                                         background: white;
                                         color: black;
                                     }
+                                    .useasCamp
+                                    {
+                                          margin-left: 645px;
+    margin-bottom: 27px;
+}
+
+
                                 </style>
                                 <!-- new line add by me  -->
                                 <div class="row">
 
                                     <div class="col-12 grid-margin">
-                                        <div class="manageCategoryInTempMSg">
-                                            <a href="/contacts" class="button-12" id="manageCategoryBTN">Manage Category</a>
+                                        <div class="manageGroupInTempMSg">
+                                            <a href="/contacts" class="button-12" id="manageGroupBTN">Manage Group</a>
                                         </div>
                                         <div class="card">
 
@@ -56,8 +63,14 @@
 
 
                                                 </div>
+
+
                                                 <!--action="/saveTemplateInDb" method="post"   -->
                                                 <form id="togleTemplateMsg" action="/sendtemplateMessages" method="post" enctype="multipart/form-data">
+   <div class="useasCamp">
+ <input type="checkbox" id="checkBoxExample" name="checkBoxExample"> Use as campaign
+                                                </div>
+
 
                                                     <div
                                                         class="container mt-0 mb-5 p-5 col-10 shadow-lg text-secondary">
@@ -80,10 +93,10 @@
                                                             </div>
 
 
-                                                            <div class="form-check sameInputHover" onclick="toggleSelectCategoryInputfield()">
-                                                                <input type="radio" name="sameBtn" value="selectedCategoryInput" id="checkSElectCAtegory">
+                                                            <div class="form-check sameInputHover" onclick="toggleSelectGroupInputfield()">
+                                                                <input type="radio" name="sameBtn" value="selectedGroupInput" id="checkSElectGroup">
 
-                                                                <label for="checkSElectCAtegory"><strong>Select Category</strong></label>
+                                                                <label for="checkSElectGroup"><strong>Select Group</strong></label>
                                                             </div>
 
 
@@ -106,15 +119,15 @@
                                                             <input class="form-control w-50" onchange="displayFileName()" name="extractExcel" id="excelFile" type="file" accept=".xlsx">
                                                         </div>
 
-                                                        <!-- select category here -->
+                                                        <!-- select Group here -->
                                                         <div class="form-check sameInputHover"
-                                                            id="hideANdShowCategorySEction">
-                                                            <select name="category" id="category"
+                                                            id="hideANdShowGroupSEction">
+                                                            <select name="Group" id="Group"
                                                                 class="w-100 text-secondary p-2">
-                                                                <option value=""> Select Category</option>
-                                                                <% categories.forEach(category=> { %>
-                                                                    <option value="<%= category %>">
-                                                                        <%= category %>
+                                                                <option value=""> Select Group</option>
+                                                                <% Groups.forEach(Group=> { %>
+                                                                    <option value="<%= Group %>">
+                                                                        <%= Group %>
                                                                     </option>
                                                                     <% }); %>
                                                             </select>
@@ -130,6 +143,13 @@
                                                             <p class="text-danger" id="selError"></p>
                                                         </div>
                                                         <p class="text-danger" id="templateError"></p>
+
+<div id="templateNameField" style="display: none;">
+    <label for="campaignName">Campaign Name:</label>
+    <input type="text" id="campaignName" name="campaignName">
+</div>
+
+
                                                         <!-- btn-dark -->
                                                         <!-- <button type="submit" id="btn" class="btn w-100 btn-dark">Send
                                                             Template</button> -->
@@ -190,8 +210,8 @@
                                 </script>
                                 <script>
                                     // Get a reference to the checkbox element and the div to show/hide
-                                    const checkbox = document.getElementById("checkSElectCAtegory");
-                                    const divToToggle = document.getElementById("hideANdShowCategorySEction");
+                                    const checkbox = document.getElementById("checkSElectGroup");
+                                    const divToToggle = document.getElementById("hideANdShowGroupSEction");
                                     divToToggle.style.display = 'none';
                                     // Add an event listener to the checkbox
                                     checkbox.addEventListener("click", function () {
@@ -203,6 +223,35 @@
                                             divToToggle.style.display = "none";
                                         }
                                     });
+
+
+                                    //Template logic
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkbox = document.getElementById('checkBoxExample');
+        const templateNameField = document.getElementById('templateNameField');
+
+        checkbox.addEventListener('change', function () {
+            if (checkbox.checked) {
+                templateNameField.style.display = 'block';
+            } else {
+                templateNameField.style.display = 'none';
+            }
+        });
+
+        const radioButtons = document.querySelectorAll('input[type="radio"][name="sameBtn"]');
+        radioButtons.forEach(function(radioButton) {
+            radioButton.addEventListener('change', function() {
+                if (radioButton.value === "selectedGroupInput" && checkbox.checked) {
+                    templateNameField.style.display = 'block';
+                } else {
+                    templateNameField.style.display = 'none';
+                }
+            });
+        });
+    });
+
+
                                 </script>
                             </div>
                             <%- include('partials/footer.ejs') %>
@@ -211,10 +260,10 @@
 
                 <!-- <script>
                     document.addEventListener("DOMContentLoaded", function () {
-                        const categorySelect = document.getElementById("category");
-                        categorySelect.addEventListener("change", function () {
-                            const selectedCategory = categorySelect.value;
-                            getMobileNumbers(selectedCategory);
+                        const GroupSelect = document.getElementById("Group");
+                        GroupSelect.addEventListener("change", function () {
+                            const selectedGroup = GroupSelect.value;
+                            getMobileNumbers(selectedGroup);
                         });
 
                         const sendButton = document.getElementById("btn");
@@ -224,8 +273,8 @@
                         });
                     });
 
-                    function getMobileNumbers(selectedCategory) {
-                        fetch(`/getMobileNumbers?category=${selectedCategory}`)
+                    function getMobileNumbers(selectedGroup) {
+                        fetch(`/getMobileNumbers?Group=${selectedGroup}`)
                             .then((response) => response.json())
                             .then((data) => {
                                 // Assuming `data.mobileNumbers` is an array of phone numbers
@@ -276,8 +325,8 @@
                         // For example, confirm with the user before sending, or validate the template and data.
 
                         // Then, you can call the `getMobileNumbers` function to send messages to the selected numbers.
-                        const selectedCategory = document.getElementById("category").value;
-                        getMobileNumbers(selectedCategory);
+                        const selectedGroup = document.getElementById("Group").value;
+                        getMobileNumbers(selectedGroup);
                     }
                 </script> -->
         </div>

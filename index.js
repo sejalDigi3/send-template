@@ -25,7 +25,7 @@ const {
   customMessageContent,
   ChattingMsg,
   NumberModel,
-  categoryManage
+  GroupManage
 }
   = require('./model/schema');
 
@@ -464,17 +464,17 @@ app.post('/uploadingFile', upload.single('file'), async (req, res) => {
 });
 
 
-// post request for category management
-app.post('/categoryNameSaveIntoDb', async (req, res) => {
+// post request for Group management
+app.post('/GroupNameSaveIntoDb', async (req, res) => {
   try {
-    const categoryNameInput = req.body.categoryName;
+    const GroupNameInput = req.body.GroupName;
 
-    const saveCategoriesInDb = new categoryManage({
-      categoryName: categoryNameInput.trim() // Remove leading/trailing spaces
+    const saveGroupsInDb = new GroupManage({
+      GroupName: GroupNameInput.trim() // Remove leading/trailing spaces
     });
 
-    await saveCategoriesInDb.save();
-    res.redirect('category_management');
+    await saveGroupsInDb.save();
+    res.redirect('Group_management');
   } catch (error) {
     console.log(error);
   }

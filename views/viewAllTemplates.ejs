@@ -43,8 +43,8 @@
 </select>
 
 
-<select id="categoryFilter">
-    <option value="">Select Category</option>
+<select id="GroupFilter">
+    <option value="">Select Group</option>
     <option value="UTILITY">Utility</option>
     <option value="MARKETING">Marketing</option>
     <option value="AUTHENTICATION">Authentication</option>
@@ -67,7 +67,7 @@
                                                             <th scope="col">Status</th>
                                                             <th scope="col">Component Body Text</th>
                                                               <th scope="col">Country</th>
-                                                                <th scope="col">Category</th>
+                                                                <th scope="col">Group</th>
 
                                                         </tr>
                                                     </thead>
@@ -93,7 +93,7 @@
                                                     const pageSelect = document.getElementById('pageSelect');
 const statusFilter = document.getElementById('statusFilter').value;
 // const languageFilter = document.getElementById('languageFilter').value;
-// const categoryFilter = document.getElementById('categoryFilter').value;
+// const GroupFilter = document.getElementById('GroupFilter').value;
 console.log(statusFilter,"djwjd");
     switch (statusFilter) {
         case 'approved':
@@ -113,11 +113,11 @@ console.log(statusFilter,"djwjd");
 
 
 
-// Define a variable to store the category filter value
-const categoryFilter = document.getElementById('categoryFilter').value;
+// Define a variable to store the Group filter value
+const GroupFilter = document.getElementById('GroupFilter').value;
 
 
-                                                    async function fetchData(page,statusFilter,categoryFilter) {
+                                                    async function fetchData(page,statusFilter,GroupFilter) {
 
            let status;
     switch (statusFilter) {
@@ -135,27 +135,27 @@ const categoryFilter = document.getElementById('categoryFilter').value;
             break;
     }
 
-    // Implement the switch case statement for the category filter inside the fetchData function
-let category;
-switch (categoryFilter) {
+    // Implement the switch case statement for the Group filter inside the fetchData function
+let Group;
+switch (GroupFilter) {
     case 'UTILITY':
-        category = 'UTILITY';
+        Group = 'UTILITY';
         break;
     case 'MARKETING':
-        category = 'MARKETING';
+        Group = 'MARKETING';
         break;
     case 'AUTHENTICATION':
-        category = 'AUTHENTICATION';
+        Group = 'AUTHENTICATION';
         break;
     default:
-        category = 'UTILITY'; // Default to empty string if filter type is not recognized
+        Group = 'UTILITY'; // Default to empty string if filter type is not recognized
         break;
 }
 
 
     try {
 
-      const response = await fetch(`${apiUrl}?status=${status}&category=${category}&page=${page}&limit=${itemsPerPage}`, {
+      const response = await fetch(`${apiUrl}?status=${status}&Group=${Group}&page=${page}&limit=${itemsPerPage}`, {
             headers: {
                 Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
                                                                     "Content-Type": "application/json",
@@ -180,12 +180,12 @@ console.log("gdweugfew",data);
                                                                     const statusCell = row.insertCell(2);
                                                                     const bodyTextCell = row.insertCell(3);
                                                                     const language=row.insertCell(4);
-                                                                    const Category = row.insertCell(5)
+                                                                    const Group = row.insertCell(5)
 
                                                                     idCell.textContent = startIndex + index + 1; // Calculate the ID
                                                                     nameCell.textContent = item.name || 'N/A';
                                                                     statusCell.textContent = item.status || 'N/A';
-                                                                    Category.textContent=item.category || 'N/A';
+                                                                    Group.textContent=item.Group || 'N/A';
                                                                     language.textContent=item.language || 'N/A';
                                                                     // Find the 'BODY' component in the 'components' array
                                                                     const bodyComponent = item.components.find(component => component.type === 'BODY');
@@ -253,19 +253,19 @@ console.log("gdweugfew",data);
 //                                                     function applyFilter() {
 //     const statusSearchText = document.getElementById('statusFilter').value
 //     // const languageSearchText =  document.getElementById('languageFilter').value
-//     // const categorySearchText = document.getElementById('categoryFilter').value  ;
-// // console.log(statusSearchText,languageSearchText,categorySearchText);
+//     // const GroupSearchText = document.getElementById('GroupFilter').value  ;
+// // console.log(statusSearchText,languageSearchText,GroupSearchText);
 //     // fetchDataByFilter(filterType);
 // }
 // Implement the applyFilter function to update the statusFilter value and fetch data
 function applyFilter() {
     const statusSearchText = document.getElementById('statusFilter').value;
-        const categorySearchText = document.getElementById('categoryFilter').value;
+        const GroupSearchText = document.getElementById('GroupFilter').value;
     // const languageSearchText =  document.getElementById('languageFilter').value
-    // const categorySearchText = document.getElementById('categoryFilter').value  ;
-    // console.log(statusSearchText,languageSearchText,categorySearchText);
+    // const GroupSearchText = document.getElementById('GroupFilter').value  ;
+    // console.log(statusSearchText,languageSearchText,GroupSearchText);
     currentPage = 1; // Reset current page to 1 when applying filter
-    fetchData(currentPage, statusSearchText,categorySearchText);
+    fetchData(currentPage, statusSearchText,GroupSearchText);
 
     }
                                                 </script>

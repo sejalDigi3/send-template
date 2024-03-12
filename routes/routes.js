@@ -20,7 +20,7 @@ const {
   alluserOfourPanel,
   ChattingMsg,
   NumberModel,
-  categoryManage,
+  GroupManage,
   campaignsSchema,
   campaignHistory,
 } = require("../model/schema");
@@ -51,16 +51,16 @@ router.get("/templateMessage", auth, async (req, res) => {
   try {
     const showInSelectBox = await NumberModel.find({});
 
-    const categoriesSet = new Set();
+    const GroupsSet = new Set();
     const mobileNumbers = [];
 
     showInSelectBox.forEach((item) => {
-      categoriesSet.add(item.categories);
+      GroupsSet.add(item.Groups);
       mobileNumbers.push(item.mobile);
     });
-    const categories = Array.from(categoriesSet);
+    const Groups = Array.from(GroupsSet);
 
-    res.render("templateMessage", { categories, mobileNumbers });
+    res.render("templateMessage", { Groups, mobileNumbers });
   } catch (error) {
     console.log(error);
   }
@@ -68,9 +68,9 @@ router.get("/templateMessage", auth, async (req, res) => {
 
 router.get("/getMobileNumbers", auth, async (req, res) => {
   try {
-    const selectedCategory = req.query.category;
+    const selectedGroup = req.query.Group;
     const mobileNumbers = await NumberModel.find(
-      { categories: selectedCategory },
+      { Groups: selectedGroup },
       { mobile: 1, _id: 0 }
     );
     res.json({ mobileNumbers });
@@ -183,7 +183,7 @@ router.get("/getUserRole/:userId", async (req, res) => {
       .json({
         name: user.name,
         mobile: user.mobile,
-        categories: user.categories,
+        Groups: user.Groups,
       });
   } catch (error) {
     console.error("Error fetching user role:", error);
@@ -197,14 +197,14 @@ router.post("/updateRole/:userId", async (req, res) => {
     const userId = req.params.userId;
     const newname = req.body.newname;
     const newmobile = req.body.newmobile;
-    const newCategory = req.body.newCategory;
-    console.log(newCategory);
+    const newGroup = req.body.newGroup;
+    console.log(newGroup);
     // console.log(newname);
     // console.log(newmobile);
     //update users name and mobile in mongodb
     const user = await NumberModel.findOneAndUpdate(
       { _id: userId },
-      { name: newname, mobile: newmobile, categories: newCategory },
+      { name: newname, mobile: newmobile, Groups: newGroup },
 
       { new: true }
     );
@@ -225,44 +225,44 @@ router.post("/updateRole/:userId", async (req, res) => {
 });
 
 
-//category_management
-router.get("/category_management", auth, async (req, res) => {
+//Group_management
+router.get("/Group_management", auth, async (req, res) => {
   try {
-    const categories = await categoryManage.find();
-    res.render("category_management", { categories });
+    const Groups = await GroupManage.find();
+    res.render("Group_management", { Groups });
   } catch (error) {
     console.log(error);
   }
 });
 
-router.get("/category_management/edit/:id", async (req, res) => {
+router.get("/Group_management/edit/:id", async (req, res) => {
   try {
-    const categoryId = req.params.id;
-    const category = await categoryManage.findById(categoryId);
-    res.render("edit_category", { category });
+    const GroupId = req.params.id;
+    const Group = await GroupManage.findById(GroupId);
+    res.render("edit_Group", { Group });
   } catch (error) {
     console.log(error);
   }
 });
 
-router.post("/category_management/update/:id", async (req, res) => {
+router.post("/Group_management/update/:id", async (req, res) => {
   try {
-    const categoryId = req.params.id;
-    const updatedCategoryName = req.body.categoryName;
-    const category = await categoryManage.findById(categoryId);
-    category.categoryName = updatedCategoryName;
-    await category.save();
-    res.redirect("/category_management");
+    const GroupId = req.params.id;
+    const updatedGroupName = req.body.GroupName;
+    const Group = await GroupManage.findById(GroupId);
+    Group.GroupName = updatedGroupName;
+    await Group.save();
+    res.redirect("/Group_management");
   } catch (error) {
     console.log(error);
   }
 });
 
-router.get("/category_management/delete/:id", async (req, res) => {
+router.get("/Group_management/delete/:id", async (req, res) => {
   try {
-    const categoryId = req.params.id;
-    await categoryManage.findByIdAndRemove(categoryId);
-    res.redirect("/category_management");
+    const GroupId = req.params.id;
+    await GroupManage.findByIdAndRemove(GroupId);
+    res.redirect("/Group_management");
   } catch (error) {
     console.log(error);
   }
@@ -270,10 +270,10 @@ router.get("/category_management/delete/:id", async (req, res) => {
 
 router.get("/contacts", auth, async (req, res) => {
   try {
-    const categories = await categoryManage.find();
-    const categoryNames = categories.map((category) => category.categoryName);
-    // console.log(categoryNames);
-    // console.log(`now check here : ${categoryNames}`);
+    const Groups = await GroupManage.find();
+    const GroupNames = Groups.map((Group) => Group.GroupName);
+    // console.log(GroupNames);
+    // console.log(`now check here : ${GroupNames}`);
     const page = parseInt(req.query.page) || 1; // Default to page 1 if no page parameter is provided
     const perPage = 5; // Number of records to display per page
     let sortOrder = 1;
@@ -299,7 +299,7 @@ router.get("/contacts", auth, async (req, res) => {
         name: user.name,
         userID: user._id.toHexString(),
         mobile: user.mobile,
-        categories: user.categories,
+        Groups: user.Groups,
       };
     });
     //  console.log(formattedUsers);
@@ -315,8 +315,8 @@ router.get("/contacts", auth, async (req, res) => {
       nextPage: page + 1,
       sort: req.query.sort || "name",
       CountTotalNumbers,
-      categoryNames, // Add categoryNames here if it's defined in your route handler.
-      updatedCategory: req.query.updatedCategory, // Pass the updated category to the view
+      GroupNames, // Add GroupNames here if it's defined in your route handler.
+      updatedGroup: req.query.updatedGroup, // Pass the updated Group to the view
     });
   } catch (error) {
     console.error(error);
@@ -324,14 +324,14 @@ router.get("/contacts", auth, async (req, res) => {
   }
 });
 
-router.post("/updateCategories", async (req, res) => {
+router.post("/updateGroups", async (req, res) => {
   const selectedPhoneNumbers = req.body.selectedIds; // Assuming you are sending phone numbers from the client-side
-  const selectedCategory = req.body.category;
-  console.log(`now can you check : ${selectedCategory}`);
+  const selectedGroup = req.body.Group;
+  console.log(`now can you check : ${selectedGroup}`);
   try {
     const result = await NumberModel.updateMany(
       { mobile: { $in: selectedPhoneNumbers } }, // Filter based on phone numbers
-      { $set: { categories: selectedCategory } }
+      { $set: { Groups: selectedGroup } }
     );
 
     console.log("Documents updated:", result);
@@ -360,17 +360,17 @@ router.get("/createCampaigns", auth, async (req, res) => {
   try {
     const showInSelectBox = await NumberModel.find({});
 
-    const categoriesSet = new Set();
+    const GroupsSet = new Set();
     const mobileNumbers = [];
 
     showInSelectBox.forEach((item) => {
-      categoriesSet.add(item.categories);
+      GroupsSet.add(item.Groups);
       mobileNumbers.push(item.mobile);
     });
     //  console.log("Mobile Numbers:", mobileNumbers);
-    const categories = Array.from(categoriesSet);
+    const Groups = Array.from(GroupsSet);
 
-    res.render("createCampaigns", { categories });
+    res.render("createCampaigns", { Groups });
   } catch (error) {
     console.log(error);
   }
@@ -420,20 +420,20 @@ router.get("/sendCampaignMessage", auth, async (req, res) => {
 
     const showInSelectBox = await NumberModel.find({});
 
-    const categoriesSet = new Set();
+    const GroupsSet = new Set();
     const mobileNumbers = [];
 
     showInSelectBox.forEach((item) => {
-      categoriesSet.add(item.categories);
+      GroupsSet.add(item.Groups);
       mobileNumbers.push(item.mobile);
     });
 
-    const categories = Array.from(categoriesSet);
+    const Groups = Array.from(GroupsSet);
     // Render the 'sendCampaignMessage' view with the retrieved data
     res.render("sendCampaignMessage", {
       phoneOfTemp,
       messageType,
-      categories,
+      Groups,
       mobileNumbers,
       campaign: campaignDetails,
     });
@@ -724,23 +724,23 @@ router.post(
         }
         // custom message condition Ends
       }
-      // Select category
+      // Select Group
       else if (selectedOption === "selectCat") {
         const campName = req.body.campaignName;
         const MsgType = req.body.messageType;
         const MsgContent = req.body.messageContent;
 
         const showInSelectBox = await NumberModel.find({});
-        const selectedCategory = req.body.category;
-        console.log("Selected Category:", selectedCategory);
-        // Filter mobile numbers based on the selected category
-        const mobileNumbersOfSelectedCategory = showInSelectBox
-          .filter((item) => item.categories === selectedCategory)
+        const selectedGroup = req.body.Group;
+        console.log("Selected Group:", selectedGroup);
+        // Filter mobile numbers based on the selected Group
+        const mobileNumbersOfSelectedGroup = showInSelectBox
+          .filter((item) => item.Groups === selectedGroup)
           .map((item) => item.mobile);
-        console.log("Selected Category:", selectedCategory);
+        console.log("Selected Group:", selectedGroup);
         console.log(
-          "Mobile Numbers of Selected Category:",
-          mobileNumbersOfSelectedCategory
+          "Mobile Numbers of Selected Group:",
+          mobileNumbersOfSelectedGroup
         );
 
         if (messageType == "template") {
@@ -750,13 +750,13 @@ router.post(
             messageType: MsgType,
             message: MsgContent,
             phoneNumbers: phoneNumbersInput,
-            categoryName: selectedCategory,
-            categoryNumber: mobileNumbersOfSelectedCategory,
+            GroupName: selectedGroup,
+            GroupNumber: mobileNumbersOfSelectedGroup,
           });
           // console.log(`before saving : ${SaveCampaigncontact.campaignName}`);
           await SaveCampaigncontact.save();
 
-          for (const phoneNumber of mobileNumbersOfSelectedCategory) {
+          for (const phoneNumber of mobileNumbersOfSelectedGroup) {
             try {
               const response = await axios.post(
                 APILink,
@@ -795,13 +795,13 @@ router.post(
             messageType: MsgType,
             message: MsgContent,
             phoneNumbers: phoneNumbersInput,
-            categoryName: selectedCategory,
-            categoryNumber: mobileNumbersOfSelectedCategory,
+            GroupName: selectedGroup,
+            GroupNumber: mobileNumbersOfSelectedGroup,
           });
           // console.log(`before saving : ${SaveCampaigncontact.campaignName}`);
           await SaveCampaigncontact.save();
 
-          for (const phoneNumber of mobileNumbersOfSelectedCategory) {
+          for (const phoneNumber of mobileNumbersOfSelectedGroup) {
             try {
               const response = await axios.post(
                 APILink,
@@ -1219,18 +1219,18 @@ module.exports = router;
 //       }
 //     }
 //     // Handle bulk upload saving logic here
-//   } // save message with select category contacts
-//   else if (sameBtn === 'selectedCategoryInput') {
+//   } // save message with select Group contacts
+//   else if (sameBtn === 'selectedGroupInput') {
 //     const messageContent = req.body.selectTemp;
 //     const showInSelectBox = await NumberModel.find({});
-//     const selectedCategory = req.body.category;
-//     console.log('Selected Category:', selectedCategory);
-//     const mobileNumbersOfSelectedCategory = showInSelectBox
-//       .filter(item => item.categories === selectedCategory)
+//     const selectedGroup = req.body.Group;
+//     console.log('Selected Group:', selectedGroup);
+//     const mobileNumbersOfSelectedGroup = showInSelectBox
+//       .filter(item => item.Groups === selectedGroup)
 //       .map(item => item.mobile);
-//     console.log('Selected Category:', selectedCategory);
-//     console.log('Mobile Numbers of Selected Category:', mobileNumbersOfSelectedCategory);
-//     for (const phoneNumber of mobileNumbersOfSelectedCategory) {
+//     console.log('Selected Group:', selectedGroup);
+//     console.log('Mobile Numbers of Selected Group:', mobileNumbersOfSelectedGroup);
+//     for (const phoneNumber of mobileNumbersOfSelectedGroup) {
 //       try {
 //         const response = await axios.post(
 //           'https://graph.facebook.com/v18.0/116168451372633/messages',
@@ -1257,8 +1257,8 @@ module.exports = router;
 //         console.error(`Error sending message to ${phoneNumber}: ${messageContent} ${error.message}`);
 //       }
 //     }
-//     console.log('Select Category is checked');
-//     // Handle select category logic here
+//     console.log('Select Group is checked');
+//     // Handle select Group logic here
 //   } else {
 //     console.log('No radio button is checked');
 //   }
@@ -1266,9 +1266,9 @@ module.exports = router;
 // });
 
 
-//now
+//now template working
 router.post('/sendtemplateMessages', upload.single('extractExcel'), auth, async (req, res) => {
-  const { sameBtn } = req.body; // Assuming you're using body-parser middleware
+  const { checkBoxExample, sameBtn } = req.body;
 
   if (sameBtn === 'multipleNumbers') {
     const phoneNumbers = req.body.phoneOfTemp;
@@ -1298,7 +1298,7 @@ router.post('/sendtemplateMessages', upload.single('extractExcel'), auth, async 
         );
 
         const savingTemplateMessageInDB = new templateMsg({
-          phoneOfTemp: phoneNumbers,
+          phoneOfTemp: allPhoneNumbers.join(','),
           selectTemp: messageContent
         })
         await savingTemplateMessageInDB.save();
@@ -1334,8 +1334,13 @@ router.post('/sendtemplateMessages', upload.single('extractExcel'), auth, async 
         console.log('Received Excel file:', excelFile.originalname);
         console.log('Excel File Data:');
         console.log(jsonData);
+
+        // Initialize an array to store phone numbers
+        const phoneNumbers = [];
+
         for (const entry of jsonData) {
           const number = entry.mobile;
+          phoneNumbers.push(number); // Push each number to the array
           try {
             const response = await axios.post(
               'https://graph.facebook.com/v18.0/243678098829351/messages',
@@ -1358,28 +1363,43 @@ router.post('/sendtemplateMessages', upload.single('extractExcel'), auth, async 
               }
             );
             console.log(`Message sent to ${number}`);
-            console.log(`${numbers} see here ${error} mobile numbers ${messageContent}`)
           } catch (error) {
             console.error(`Error sending message to ${number}: ${messageContent} ${error.message}`);
           }
         }
+        console.log(phoneNumbers);
+        // Save the phone numbers array to the database
+        const savingTemplateMessageInDB = new templateMsg({
+          phoneOfTemp: phoneNumbers.join(','), // Convert array to string
+          selectTemp: messageContent
+        });
+        await savingTemplateMessageInDB.save();
+
       } catch (error) {
         console.error('Error processing Excel file:', error);
       }
     }
     // Handle bulk upload saving logic here
-  } // save message with select category contacts
-  else if (sameBtn === 'selectedCategoryInput') {
+  }
+  else if (sameBtn === 'selectedGroupInput') {
     const messageContent = req.body.selectTemp;
     const showInSelectBox = await NumberModel.find({});
-    const selectedCategory = req.body.category;
-    console.log('Selected Category:', selectedCategory);
-    const mobileNumbersOfSelectedCategory = showInSelectBox
-      .filter(item => item.categories === selectedCategory)
+    const selectedGroup = req.body.Group;
+    console.log('Selected Group:', selectedGroup);
+    const mobileNumbersOfSelectedGroup = showInSelectBox
+      .filter(item => item.Groups === selectedGroup)
       .map(item => item.mobile);
-    console.log('Selected Category:', selectedCategory);
-    console.log('Mobile Numbers of Selected Category:', mobileNumbersOfSelectedCategory);
-    for (const phoneNumber of mobileNumbersOfSelectedCategory) {
+    console.log('Selected Group:', selectedGroup);
+    console.log('Mobile Numbers of Selected Group:', mobileNumbersOfSelectedGroup);
+
+    // Save the phone numbers array to the database
+    const savingTemplateMessageInDB = new templateMsg({
+      phoneOfTemp: mobileNumbersOfSelectedGroup.join(','), // Convert array to string
+      selectTemp: messageContent
+    });
+    await savingTemplateMessageInDB.save();
+
+    for (const phoneNumber of mobileNumbersOfSelectedGroup) {
       try {
         const response = await axios.post(
           'https://graph.facebook.com/v18.0/243678098829351/messages',
@@ -1406,26 +1426,61 @@ router.post('/sendtemplateMessages', upload.single('extractExcel'), auth, async 
         console.error(`Error sending message to ${phoneNumber}: ${messageContent} ${error.message}`);
       }
     }
-    console.log('Select Category is checked');
-    // Handle select category logic here
-  } else {
-    console.log('No radio button is checked');
+    console.log('Select Group is checked');
+    // Handle select Group logic here
   }
-  res.send(`
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Message Sent Successfully</title>
-  </head>
-  <body>
-  <center><h1>Message has been sent successfully!</h1></center>
-  </body>
-  </html>
-`);
+  else {
+    // Send a response indicating success without creating a campaign
+    res.send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Message Sent Successfully</title>
+      </head>
+      <body>
+        <center><h1>Message has been sent successfully!</h1></center>
+      </body>
+      </html>
+    `);
+  }
+  if (checkBoxExample === 'on') {
+    try {
+      const phoneOfTemp = req.body.phoneOfTemp;
+      const messageType = req.body.selectTemp;
+      const campaignName = req.body.campaignName;
+      console.log(req.body);
+      // Create a new Campaign document
+      const newCampaign = new campaignsSchema({
+        phoneOfTemp,
+        messageType,
+        message: messageType,
+        campaignName: campaignName
+      });
+      console.log("fnal schmea ", newCampaign);
+      // Save the campaign document to the database
+      await newCampaign.save();
 
-  // res.send('message has been sent successfully!');
+      // Send a response indicating success
+      res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Message Sent Successfully</title>
+        </head>
+        <body>
+          <center><h1>Message has been sent successfully and campaign created!</h1></center>
+        </body>
+        </html>
+      `);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("An error occurred while saving the campaign.");
+    }
+  }
 });
 
 
@@ -1481,15 +1536,15 @@ router.post('/sendtemplateMessages', upload.single('extractExcel'), auth, async 
 // router.get("/customMessage", auth, async (req, res) => {
 //   const showInSelectBox = await NumberModel.find({});
 
-//   const categoriesSet = new Set();
+//   const GroupsSet = new Set();
 //   const mobileNumbers = [];
 
 //   showInSelectBox.forEach(item => {
-//     categoriesSet.add(item.categories);
+//     GroupsSet.add(item.Groups);
 //     mobileNumbers.push(item.mobile);
 //   });
-//   const categories = Array.from(categoriesSet);
-//   res.render("customMessage", { categories, mobileNumbers });
+//   const Groups = Array.from(GroupsSet);
+//   res.render("customMessage", { Groups, mobileNumbers });
 // });
 
 // router.get('/forgotPassword', (req, res) => {

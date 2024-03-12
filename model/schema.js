@@ -17,12 +17,12 @@ const templateSchema = new mongoose.Schema({
   }
 })
 /*
-  registered business name 
-  addreses 
-  contact number 
+  registered business name
+  addreses
+  contact number
   GST NO
   PanNo
-  GST Certificate Upload  
+  GST Certificate Upload
   owners AdharCard
 */
 const customMsgSchema = new mongoose.Schema({
@@ -86,12 +86,12 @@ const usersSchema = new mongoose.Schema(
     resetToken: String,
     APILink: String,
     BearerToken: String,
-    verified_name:String,
-    code_verification_status:String,
-    display_phone_number:String,
-    quality_rating:String,
-    id:Number,
-    
+    verified_name: String,
+    code_verification_status: String,
+    display_phone_number: String,
+    quality_rating: String,
+    id: Number,
+
     tokens: [
       {
         token: {
@@ -148,7 +148,7 @@ usersSchema.pre('save', async function (next) {
   next();
 });
 
-// schema for chat section Starts 
+// schema for chat section Starts
 const realTimechat = new mongoose.Schema({
   gettingMsg: {
     type: String,
@@ -165,7 +165,7 @@ const realTimechat = new mongoose.Schema({
 const numberSchema = new mongoose.Schema({
   name: String,
   mobile: String,
-  categories: {
+  Groups: {
     type: String,
     default: 'uncategorized',
   }
@@ -174,37 +174,39 @@ const numberSchema = new mongoose.Schema({
 
 
 
-// Define a static method to update category by name and mobile
-numberSchema.statics.updateCategoryByNameAndMobile = async function(name, mobile, newCategory) {
+// Define a static method to update Group by name and mobile
+numberSchema.statics.updateGroupByNameAndMobile = async function (name, mobile, newGroup) {
   try {
-      const result = await this.updateMany({ name, mobile }, { $set: { categories: newCategory } });
-      return result;
+    const result = await this.updateMany({ name, mobile }, { $set: { Groups: newGroup } });
+    return result;
   } catch (error) {
-      throw error;
+    throw error;
   }
 };
 
 
-// category management
-const categorySchema = new mongoose.Schema({
-  categoryName: {
+// Group management
+const GroupSchema = new mongoose.Schema({
+  GroupName: {
     type: String,
-}, 
+  },
 }, { timestamps: true }); // Use timestamps option to automatically add createdAt and updatedAt fields
 
 // campaigns Schema
 const campaignSchema = new mongoose.Schema({
-  phoneOfTemp: String,
+  // phoneOfTemp: String,
+  phoneOfTemp: [String],
   messageType: String, // To store the selected radio button value
   message: String,    // Custom Message Data
-},{ timestamps: true });
+  campaignName: String, // New field to store the name of the campaign
+}, { timestamps: true });
 // campaigns Schema
 
 // collecthistory of Campaign
 const contactNumbersSchema = new mongoose.Schema({
   campaignName: String,
-  messageType: String, 
-  message: String, 
+  messageType: String,
+  message: String,
   excelData: [
     {
       name: {
@@ -215,11 +217,11 @@ const contactNumbersSchema = new mongoose.Schema({
       },
     },
   ],
-  phoneNumbers:String,
-  categoryName:String,
-  categoryNumber:[{}],
-  fileName:String
-},{ timestamps: true });
+  phoneNumbers: String,
+  GroupName: String,
+  GroupNumber: [{}],
+  fileName: String
+}, { timestamps: true });
 
 // collecthistory of Campaign
 
@@ -229,17 +231,17 @@ const alluserOfourPanel = new mongoose.model('alluserOfourPanel', usersSchema);
 const customMessageContent = new mongoose.model('customMessage', customMsgSchema)
 const ChattingMsg = new mongoose.model('ChattingMsg', realTimechat)
 const NumberModel = mongoose.model('NumberModel', numberSchema);
-const categoryManage = new mongoose.model('categoryManage', categorySchema);
+const GroupManage = new mongoose.model('GroupManage', GroupSchema);
 const campaignsSchema = new mongoose.model('campaignsSchema', campaignSchema);
 const campaignHistory = new mongoose.model('campaignHistory', contactNumbersSchema);
 const User = mongoose.model('User', usersSchema);
-module.exports = { 
-  alluserOfourPanel, 
-  templateMsg, 
+module.exports = {
+  alluserOfourPanel,
+  templateMsg,
   customMessageContent,
-  ChattingMsg ,
+  ChattingMsg,
   NumberModel,
-  categoryManage,
+  GroupManage,
   campaignsSchema,
   campaignHistory,
   User

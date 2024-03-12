@@ -13,7 +13,7 @@
                                         <span class="page-title-icon bg-gradient-primary text-white me-2">
                                             <i class="mdi mdi-home"></i>
                                             <!-- <img src="/static/assets/images/home-gradient.png" alt="" style="width: 35px;"> -->
-                                        </span> Category management
+                                        </span> Group management
                                     </h3>
                                 </div>
 
@@ -21,7 +21,7 @@
                                 <div class="row">
                                     <div class="col-lg-12 grid-margin stretch-card">
                                         <div class="card">
-                                            <h2 class="text-center" style="padding-top: 30px">update Category</h2>
+                                            <h2 class="text-center" style="padding-top: 30px">update Group</h2>
                                             <div class="card-body">
 
 <style>
@@ -29,15 +29,15 @@
     .catagoryCont button{margin-left: 20px;}
 </style>
 
-                                                <form action="/category_management/update/<%= category._id %>" method="post">
+                                                <form action="/Group_management/update/<%= Group._id %>" method="post">
                                                     <div class="catagoryCont" style="display: flex;">
-                                                        <input type="text" id="categoryName" style="width: 30%;" class="form-control p-2" name="categoryName" value="<%= category.categoryName %>">
-                                                        <button type="submit" class="button-12">Update Category</button>
+                                                        <input type="text" id="GroupName" style="width: 30%;" class="form-control p-2" name="GroupName" value="<%= Group.GroupName %>">
+                                                        <button type="submit" class="button-12">Update Group</button>
                                                         </div>
                                                   </form>
 
 
-                        
+
 
                                             </div>
 

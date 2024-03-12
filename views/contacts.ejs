@@ -2,7 +2,7 @@
 
   <body>
     <style>
-      .selectcategoryForm{
+      .selectGroupForm{
         display: flex;
         justify-content: space-between;
         width: 30%;
@@ -10,7 +10,7 @@
 
 
 
-      #categoryMNgBtn:hover {
+      #GroupMNgBtn:hover {
                       color: white;
                     }
                     .ClassNoSix:hover{color: white;}
@@ -107,7 +107,7 @@
                     <span class="page-title-icon bg-gradient-primary text-white me-2">
                       <i class="mdi mdi-home"></i>
                       <!-- <img src="/static/assets/images/home-gradient.png" alt="" style="width: 35px;"> -->
-                    </span> Contacts List
+                    </span> Contacts Book
 
                   </h3>
                 </div>
@@ -118,14 +118,15 @@
                     enctype="multipart/form-data" onsubmit="return validateForm()">
                     <div class="mb-3" style="width: 15rem;">
                       <label for="fileID" class="contactUpload" id="showFileName">
-                        Upload Contacts</label>
+                        Upload Contacts <img src="/static/assets/images/f.png" alt="fe" style="width: 22px;"></label>
                       <input class="form-control w-50" name="file" id="fileID" type="file"
                         accept=".xlsx, .xls, .csv, .xlsm, .xlsb, .ods, .xml, .html, .txt, .pdf, .dbf, .sylk" value=""
                         onchange="displayFileName()">
                     </div>
                     <div class="buttons" style="margin-left: -78px;
                     padding: 3px;">
-                      <button type="submit" class="button-12" id="uploadContactsButtons" style="background-color: white; color: black;">Upload</button>
+                      <!-- <button type="submit" class="button-12" id="uploadContactsButtons" style="background-color: white; color: black;margin-left: 19px;
+                    padding: -1px;">Upload</button> -->
                       <p style="text-align: center; background: red;color: white;width: 60%;margin: auto;   border-radius: 3px;"
                         id="cetegoryErrorMsg"></p>
 
@@ -133,14 +134,14 @@
 
                     </div>
                   </form>
-                  <a href="/category_management" id="categoryMNgBtn" class="button-12"
-                    style="text-decoration: none; height: 30px; margin-top: 10px; background-color: white; color: black;">category management</a>
-                  
+                  <a href="/Group_management" id="GroupMNgBtn" class="button-12"
+                    style="text-decoration: none; height: 30px; margin-top: 10px; background-color: white; color: black;">Group management</a>
+
                 </div>
-               
-               
+
+
                 <div class="row">
-                  <!-- <div class="categoryErrorMessage" style="display: flex; justify-content: center;align-items: center;"> -->
+                  <!-- <div class="GroupErrorMessage" style="display: flex; justify-content: center;align-items: center;"> -->
                   <!-- </div> -->
                   <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
@@ -173,7 +174,7 @@
                               <th class="initially-hidden"><input type="checkbox"id="selectAllbox" onclick="selectAll()"><span style="margin-left: 12px;">Select</span></th>
                               <th>name</th>
                               <th>mobile</th>
-                              <th>categories</th>
+                              <th>Groups</th>
                               <th>Action</th>
                             </tr>
                           </thead>
@@ -181,7 +182,7 @@
                             <% users.forEach(function(user) { %>
                               <tr>
                                 <td class="initially-hidden">
-                                  <input onclick="editCategories(this)" id="checkboxes" type="checkbox"
+                                  <input onclick="editGroups(this)" id="checkboxes" type="checkbox"
                                     class="user-checkbox" name="selectedUsers"
                                     value="<%= user.mobile?.replace(/[\n\r\s]+/g, '') %>">
                                 </td>
@@ -191,8 +192,8 @@
                                 <td>
                                   <%= user.mobile?.replace(/[\n\r\s]+/g, '' ) %>
                                 </td>
-                                <td class="user-category">
-                                  <%= user.categories %>
+                                <td class="user-Group">
+                                  <%= user.Groups %>
                                 </td>
                                 <td>
                                   <!-- Edit Icon -->
@@ -214,17 +215,17 @@
 
                         <div class="buttonContainer">
 
-                          <!-- <div class="categoryBtn"> -->
+                          <!-- <div class="GroupBtn"> -->
                             <!-- <button class="button-12" id="selectAllbox" onclick="selectAll()">Select All</button> -->
 
-                            <form method="POST" class="selectcategoryForm" action="/updateCategories"
-                              onsubmit="assignCategoryToSelected();return validateCheckboxSelection();">
-                              <!-- <label for="category">Select a Category:</label> -->
-                              <select name="category" id="category">
-                                <option value="">Select Categories</option>
-                                <% categoryNames.forEach(categoryName=> { %>
-                                  <option value="<%= categoryName %>">
-                                    <%= categoryName %>
+                            <form method="POST" class="selectGroupForm" action="/updateGroups"
+                              onsubmit="assignGroupToSelected();return validateCheckboxSelection();">
+                              <!-- <label for="Group">Select a Group:</label> -->
+                              <select name="Group" id="Group">
+                                <option value="">Select Groups</option>
+                                <% GroupNames.forEach(GroupName=> { %>
+                                  <option value="<%= GroupName %>">
+                                    <%= GroupName %>
                                   </option>
                                   <% }); %>
                               </select>
@@ -246,7 +247,7 @@
                           <!-- </div> -->
 
                         </div>
-                        
+
 
                         <!-- delete modal starts -->
                         <div id="deleteConfirmationModal" class="modal">
@@ -291,7 +292,7 @@
                     </div>
                   </div>
                 </div>
-               
+
               </div>
               <%- include('partials/footer.ejs') %>
             </div>
@@ -314,7 +315,7 @@
           </div>
 
           <div class="form-group" id="hideWhilePressOnBulk">
-            <input type="text" name="newCategory" id="newCategory" class="form-control p-2" placeholder="Edit Category">
+            <input type="text" name="newGroup" id="newGroup" class="form-control p-2" placeholder="Edit Group">
           </div>
 
 
@@ -325,14 +326,14 @@
     </div>
 
     <script>
-      
+
       // Handle edit icon click for editing individual user name and mobile
       var editIcons = document.querySelectorAll('.edit-icon');
       var modal = document.getElementById('editModal');
       var roleEditForm = document.getElementById('roleEditForm');
       var newNameInput = document.getElementById('newName');
       var newMobileInput = document.getElementById('newMobile');
-      var newCategoryInput = document.getElementById('newCategory');
+      var newGroupInput = document.getElementById('newGroup');
       editIcons.forEach(function (editIcon) {
         editIcon.addEventListener('click', function (event) {
           event.preventDefault();
@@ -349,10 +350,10 @@
               var data = JSON.parse(xhr.responseText);
               var currentName = data.name;
               var currentMobile = data.mobile;
-              var currentCategory = data.categories;
+              var currentGroup = data.Groups;
               newNameInput.value = currentName;
               newMobileInput.value = currentMobile;
-              newCategoryInput.value = currentCategory;
+              newGroupInput.value = currentGroup;
             } else if (xhr.readyState === 4 && xhr.status !== 200) {
               console.error('Error fetching user name and mobile', xhr.status, xhr.statusText);
             }
@@ -366,8 +367,8 @@
             // console.log(newname);
             var newmobile = newMobileInput.value;
             // console.log(newmobile);
-            var newCategory = newCategoryInput.value;
-            // console.log(newCategory);
+            var newGroup = newGroupInput.value;
+            // console.log(newGroup);
             // Send an AJAX request to update the user's role
             var xhr2 = new XMLHttpRequest();
 
@@ -386,12 +387,12 @@
                   if (row) {
                     var nameCell = row.querySelector('td:nth-child(2)');
                     var mobileCell = row.querySelector('td:nth-child(3)');
-                    var categoryCell = row.querySelector('td:nth-child(4)');
+                    var GroupCell = row.querySelector('td:nth-child(4)');
 
-                    if (nameCell && mobileCell && categoryCell) {
+                    if (nameCell && mobileCell && GroupCell) {
                       nameCell.textContent = newname;
                       mobileCell.textContent = newmobile;
-                      categoryCell.textContent = newCategory;
+                      GroupCell.textContent = newGroup;
                     } else {
                       console.error('Name and/or mobile cell not found');
                     }
@@ -406,7 +407,7 @@
                 console.error('Error updating user role', xhr2.status, xhr2.statusText);
               }
             };
-            xhr2.send(JSON.stringify({ newname: newname, newmobile: newmobile, newCategory: newCategory }));
+            xhr2.send(JSON.stringify({ newname: newname, newmobile: newmobile, newGroup: newGroup }));
             // console.log("update successfully!")
             window.location.reload();
           });
@@ -456,8 +457,8 @@
 
         if (!atLeastOneChecked) {
           // cetegoryErrorMsg
-          document.getElementById('cetegoryErrorMsg').innerHTML = 'Please select at least one user before adding a category';
-          // alert("Please select at least one user before adding a category.");
+          document.getElementById('cetegoryErrorMsg').innerHTML = 'Please select at least one user before adding a Group';
+          // alert("Please select at least one user before adding a Group.");
           return false; // Prevent the form from submitting
         }
 
@@ -486,7 +487,7 @@
       return false;
     } else {
       errorMsg.innerText = "";
-      return true; 
+      return true;
     }
   }
 

@@ -11064,7 +11064,7 @@ fieldset:disabled .btn {
 }
 
 .text-muted,
-.preview-list .preview-item .preview-item-content p .content-category {
+.preview-list .preview-item .preview-item-content p .content-Group {
   --bs-text-opacity: 1;
   color: #9c9fa6 !important;
 }
@@ -18309,7 +18309,7 @@ dl li {
 .preview-list .preview-item .preview-item-content p {
   margin-bottom: 10px;
 }
-.preview-list .preview-item .preview-item-content p .content-category {
+.preview-list .preview-item .preview-item-content p .content-Group {
   font-family: "source-sans-pro-semibold", sans-serif;
   padding-right: 15px;
   border-right: 1px solid #ebedf2;
@@ -19471,7 +19471,7 @@ dl li {
 }
 .sidebar
   .nav:not(.sub-menu)
-  > .nav-item:hover:not(.nav-category):not(.nav-profile)
+  > .nav-item:hover:not(.nav-Group):not(.nav-profile)
   > .nav-link {
   color: #29323d;
 }
@@ -19605,7 +19605,7 @@ dl li {
   .sidebar-icon-only .sidebar .nav .nav-item.nav-profile {
     display: none;
   }
-  .sidebar-icon-only .sidebar .nav .nav-item.nav-category {
+  .sidebar-icon-only .sidebar .nav .nav-item.nav-Group {
     display: none;
   }
   .sidebar-icon-only .sidebar .nav .nav-item.nav-doc {
@@ -19874,7 +19874,7 @@ input[type="file"] {
   background-color: #6E6D70;
 }
 tbody tr:hover {
-  background-color:#e6eaf1; 
+  background-color:#e6eaf1;
   cursor: context-menu;
   /* background-color:rgb(251 251 251);  */
   /* background-color: rgb(242 237 243); */
@@ -20042,7 +20042,7 @@ flex-basis: 100%;
   background: #00009d;
   color: white;
   padding: 4px;
-  border-radius: 5px; 
+  border-radius: 5px;
 }
 .containPaginationINfo .secondH4Tag:hover{
   background: #0000db;
@@ -20065,7 +20065,7 @@ flex-basis: 100%;
   /* background-color: black; */
   background-color: #ffffff;
 
-  width: 60%;
+  width: 70%;
   padding: 10px;
   /* height: 70px; */
   border-radius: 5px;
@@ -20150,7 +20150,7 @@ flex-basis: 100%;
 .paginationContainer a{
   text-decoration: none;
 }
-.categoryBtn{
+.GroupBtn{
   margin-top: 30px;
   width: 66%;
   display: flex;
@@ -20158,7 +20158,7 @@ flex-basis: 100%;
 }
 .same:hover{
  background-color: black;
- color: white !important; 
+ color: white !important;
 }
 #selectAllbox:hover{
   background-color: black;
@@ -20180,7 +20180,7 @@ flex-basis: 100%;
 
 
 
-#categoryManagement{
+#GroupManagement{
   /* text-decoration: none;
   background-color: black;
   color: white;

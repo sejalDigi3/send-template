@@ -67,8 +67,8 @@
 
                                 <div class="form-check">
                                   <input name="sameBtn" onchange="showSelectOptionsOnly()" type="radio"
-                                    value="selecteCategory" id="checkSElectCAtegory">
-                                  <label for="checkSElectCAtegory"><strong>Select Category</strong></label>
+                                    value="selecteGroup" id="checkSElectGroup">
+                                  <label for="checkSElectGroup"><strong>Select Group</strong></label>
                                 </div>
 
 
@@ -82,12 +82,12 @@
                                 <p class="text-danger" id="phoneError"></p>
                               </div>
 
-                              <div class="form-check sameInputHover" id="hideANdShowCategorySEction">
-                                <select name="category" id="category" class="w-100 text-secondary p-2">
-                                  <option value=""> Select Category</option>
-                                  <% categories.forEach(category=> { %>
-                                    <option value="<%= category %>">
-                                      <%= category %>
+                              <div class="form-check sameInputHover" id="hideANdShowGroupSEction">
+                                <select name="Group" id="Group" class="w-100 text-secondary p-2">
+                                  <option value=""> Select Group</option>
+                                  <% Groups.forEach(Group=> { %>
+                                    <option value="<%= Group %>">
+                                      <%= Group %>
                                     </option>
                                     <% }); %>
                                 </select>
@@ -179,7 +179,7 @@
                             if (customMsgCheckbox.checked) {
                               togglecustomMsgUploadCsv.style.display = 'block'
                               document.getElementById('hideWhilePressOnBulk').style.display = 'none'
-                              document.getElementById('hideANdShowCategorySEction').style.display = 'none'
+                              document.getElementById('hideANdShowGroupSEction').style.display = 'none'
                             }
                           }
 
@@ -211,8 +211,8 @@
 
 
                           // Get a reference to the checkbox element and the div to show/hide
-                          const checkbox = document.getElementById("checkSElectCAtegory");
-                          const divToToggle = document.getElementById("hideANdShowCategorySEction");
+                          const checkbox = document.getElementById("checkSElectGroup");
+                          const divToToggle = document.getElementById("hideANdShowGroupSEction");
                           divToToggle.style.display = 'none'
                           // Add an event listener to the checkbox
                           checkbox.addEventListener("click", function () {
@@ -230,7 +230,7 @@
                           showOnlySingleInputField = () => {
                             document.getElementById('hideWhilePressOnBulk').style.display = 'block';
                             document.getElementById('togglecustomMsgUploadCsv').style.display = 'none';
-                            document.getElementById('hideANdShowCategorySEction').style.display = 'none';
+                            document.getElementById('hideANdShowGroupSEction').style.display = 'none';
                           }
 
                           showSelectOptionsOnly = () => {
