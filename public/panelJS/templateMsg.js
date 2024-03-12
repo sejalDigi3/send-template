@@ -16,11 +16,12 @@
 //       },
 //     };
 //     const result = fetch(
-//       "https://graph.facebook.com/v17.0/116168451372633/messages/",
+//       "https://graph.facebook.com/v17.0/104022815935352/messages/",
 //       {
 //         method: "POST",
 //         headers: {
-//           Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+//           Authorization: `Bearer zxcvbnmlkjhgfdswertyunbnbzvxcvbsagfjkfdjkjhkjwouoriuhsdd
+WHATSAAP_TOKEN = EAAWqeZCMrJ6sBO0X7XRm9sUzT9VDnllTw54ul2YUHhh5UW8IdzCWZAQLSsNomFx6cBQJbWt7Kzsad6MnAE8Ge64EnMRALBpirjamhEXC56gxj4eZBrCV2BQoNZAkb2ZCPs8ZCEm5iq5DFvVFOhRgVo9NCx7z9TuogsSliZBv4wqrvQdm14DnzI8HyZAUkmT5yJYzwJgMwEWPcKRvA7DF`,
 //           "Content-Type": "application/json",
 //         },
 //         body: JSON.stringify(data),
@@ -28,7 +29,7 @@
 //     )
 //       .then((response) => {
 //         if (response.ok) {
-//           console.log(`Message send Successfully..${element}`);
+//           console.log(`Message send Successfully..${ element } `);
 
 //           if (result) {
 //             const param1Value = document.getElementById("phoneNumOfTemp").value;
@@ -37,17 +38,17 @@
 //             showingMessage();
 //           }
 //         } else {
-//           console.log(`Can not send message ${element}`);
+//           console.log(`Can not send message ${ element } `);
 //         }
 //       })
 //       .catch((error) => {
-//         console.log(`Can not send Message to this Number${element}`);
+//         console.log(`Can not send Message to this Number${ element } `);
 //       });
 //     function showingMessage() {
 //       document.getElementById("showSucessMessage").style.display = "block";
 //       document.getElementById(
 //         "showSucessMessage"
-//       ).innerHTML = `<h4 class="m-auto"><i class="fa fa-check" aria-hidden="true"></i>
+//       ).innerHTML = `< h4 class="m-auto" > <i class="fa fa-check" aria-hidden="true"></i>
 //             Message Has been Send Successfully...</h4>`;
 //     }
 //     function hidingScsMsg() {
@@ -104,11 +105,12 @@
 //         },
 //       };
 //       const result = fetch(
-//         "https://graph.facebook.com/v17.0/116168451372633/messages/",
+//         "https://graph.facebook.com/v17.0/104022815935352/messages/",
 //         {
 //           method: "POST",
 //           headers: {
-//             Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+//             Authorization: `Bearer zxcvbnmlkjhgfdswertyunbnbzvxcvbsagfjkfdjkjhkjwouoriuhsdd
+WHATSAAP_TOKEN = EAAWqeZCMrJ6sBO0X7XRm9sUzT9VDnllTw54ul2YUHhh5UW8IdzCWZAQLSsNomFx6cBQJbWt7Kzsad6MnAE8Ge64EnMRALBpirjamhEXC56gxj4eZBrCV2BQoNZAkb2ZCPs8ZCEm5iq5DFvVFOhRgVo9NCx7z9TuogsSliZBv4wqrvQdm14DnzI8HyZAUkmT5yJYzwJgMwEWPcKRvA7DF`,
 //             "Content-Type": "application/json",
 //           },
 //           body: JSON.stringify(dataCollections),
@@ -116,12 +118,12 @@
 //       )
 //         .then((responses) => {
 //           if (responses.ok) {
-//             console.log(`Bulk messages sent successfully ${number}`);
+//             console.log(`Bulk messages sent successfully ${ number } `);
 //             if (result) {
 //               showingMessage();
 //             }
 //           } else {
-//             console.log(`Bulk messages not sent ${number}`);
+//             console.log(`Bulk messages not sent ${ number } `);
 //           }
 //         })
 //         .catch((error) => {
@@ -130,7 +132,7 @@
 //       function showingMessage() {
 //         document.getElementById(
 //           "showSucessMessage"
-//         ).innerHTML = `<h4 class="m-auto"><i class="fa fa-check" aria-hidden="true"></i>
+//         ).innerHTML = `< h4 class="m-auto" > <i class="fa fa-check" aria-hidden="true"></i>
 //                     Message Has been Send Successfully...</h4>`;
 //       }
 //       function hidingScsMsg() {

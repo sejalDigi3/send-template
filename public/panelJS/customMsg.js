@@ -5,7 +5,7 @@
 //   let finalNum = useNum.map((element) => element.trim());
 
 //   finalNum.forEach(element => {
-//     // const APIendpoint='https://graph.facebook.com/v17.0/116168451372633/messages/';
+//     // const APIendpoint='https://graph.facebook.com/v17.0/104022815935352/messages/';
 //     let data = {
 //       "messaging_product": "whatsapp",
 //       "recipient_type": "individual",
@@ -15,22 +15,23 @@
 //         "body": `${ctMsg}`
 //       },
 //     }
-//     const result = fetch('https://graph.facebook.com/v17.0/116168451372633/messages/', {
+//     const result = fetch('https://graph.facebook.com/v17.0/104022815935352/messages/', {
 //       method: 'POST',
 //       headers: {
-//         Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+//         Authorization: `Bearer zxcvbnmlkjhgfdswertyunbnbzvxcvbsagfjkfdjkjhkjwouoriuhsdd
+WHATSAAP_TOKEN = EAAWqeZCMrJ6sBO0X7XRm9sUzT9VDnllTw54ul2YUHhh5UW8IdzCWZAQLSsNomFx6cBQJbWt7Kzsad6MnAE8Ge64EnMRALBpirjamhEXC56gxj4eZBrCV2BQoNZAkb2ZCPs8ZCEm5iq5DFvVFOhRgVo9NCx7z9TuogsSliZBv4wqrvQdm14DnzI8HyZAUkmT5yJYzwJgMwEWPcKRvA7DF`,
 //         "Content-Type": "application/json",
 //       },
 //       body: JSON.stringify(data)
 //     })
 //       .then((response) => {
 //         if (response.ok) {
-//           console.log(`Message send Successfully..${element} ${response}`);
+//           console.log(`Message send Successfully..${ element } ${ response } `);
 //         } else {
-//           console.log(`Can not send message to this number ${element}`);
+//           console.log(`Can not send message to this number ${ element } `);
 //         }
 //       }).catch((error) => {
-//         console.log(`Can not send Message to this Number${error}`);
+//         console.log(`Can not send Message to this Number${ error } `);
 //       })
 //   }) //  loop ends
 // }
@@ -48,36 +49,37 @@ attachandSendImgAPI = () => {
     const data = {
       "messaging_product": "whatsapp",
       "recipient_type": "individual",
-      "to": `${element}`,
+      "to": `${ element } `,
       "type": "image",
       "image": {
-        "link": `${attachment}`,
-        "caption": `${writeMsg}`
+        "link": `${ attachment } `,
+        "caption": `${ writeMsg } `
       },
     };
-    const result = fetch('https://graph.facebook.com/v17.0/116168451372633/messages/', {
+    const result = fetch('https://graph.facebook.com/v17.0/104022815935352/messages/', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+        Authorization: `Bearer zxcvbnmlkjhgfdswertyunbnbzvxcvbsagfjkfdjkjhkjwouoriuhsdd
+WHATSAAP_TOKEN = EAAWqeZCMrJ6sBO0X7XRm9sUzT9VDnllTw54ul2YUHhh5UW8IdzCWZAQLSsNomFx6cBQJbWt7Kzsad6MnAE8Ge64EnMRALBpirjamhEXC56gxj4eZBrCV2BQoNZAkb2ZCPs8ZCEm5iq5DFvVFOhRgVo9NCx7z9TuogsSliZBv4wqrvQdm14DnzI8HyZAUkmT5yJYzwJgMwEWPcKRvA7DF`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data)
     })
       .then((response) => {
         if (response.ok) {
-          console.log(`Message send Successfully..${element}`);
+          console.log(`Message send Successfully..${ element } `);
           if (result) {
             showingMessage();
           }
         } else {
-          console.log(`Can not send message ${element}`);
+          console.log(`Can not send message ${ element } `);
         }
       }).catch((error) => {
-        console.log(`Can not send Message to this Number${error}`);
+        console.log(`Can not send Message to this Number${ error } `);
       })
     function showingMessage() {
-      document.getElementById('showSucessMessage').innerHTML = `<h3 class="m-auto"><i class="fa fa-check" aria-hidden="true"></i>
-              Message Has been Send Successfully...</h3>`
+      document.getElementById('showSucessMessage').innerHTML = `< h3 class="m-auto" > <i class="fa fa-check" aria-hidden="true"></i>
+              Message Has been Send Successfully...</h3 > `
     }
     function hidingScsMsg() {
       document.getElementById('showSucessMessage').innerHTML = ''
@@ -113,36 +115,37 @@ attachandSendImgAPI = () => {
 //       const dataCollections = {
 //         "messaging_product": "whatsapp",
 //         "recipient_type": "individual",
-//         "to": `${number}`,
+//         "to": `${ number } `,
 //         "type": "text",
 //         "text": {
-//           "body": `${messageContent}`
+//           "body": `${ messageContent } `
 //         }
 //       }
-//       const result = fetch('https://graph.facebook.com/v17.0/116168451372633/messages/', {
+//       const result = fetch('https://graph.facebook.com/v17.0/104022815935352/messages/', {
 //         method: 'POST',
 //         headers: {
-//           Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+//           Authorization: `Bearer zxcvbnmlkjhgfdswertyunbnbzvxcvbsagfjkfdjkjhkjwouoriuhsdd
+WHATSAAP_TOKEN = EAAWqeZCMrJ6sBO0X7XRm9sUzT9VDnllTw54ul2YUHhh5UW8IdzCWZAQLSsNomFx6cBQJbWt7Kzsad6MnAE8Ge64EnMRALBpirjamhEXC56gxj4eZBrCV2BQoNZAkb2ZCPs8ZCEm5iq5DFvVFOhRgVo9NCx7z9TuogsSliZBv4wqrvQdm14DnzI8HyZAUkmT5yJYzwJgMwEWPcKRvA7DF`,
 //           "Content-Type": "application/json",
 //         },
 //         body: JSON.stringify(dataCollections)
 //       })
 //         .then((responses) => {
 //           if (responses.ok) {
-//             console.log(`Bulk messages sent successfully ${number}`);
+//             console.log(`Bulk messages sent successfully ${ number } `);
 //             if (result) {
 //               showingMessage();
 //             }
 
 //           } else {
-//             console.log(`Bulk messages not sent ${number}`);
+//             console.log(`Bulk messages not sent ${ number } `);
 //           }
 //         })
 //         .catch((error) => {
 //           console.error('Error sending bulk messages:', error);
 //         })
 //       function showingMessage() {
-//         document.getElementById('showSucessMessage').innerHTML = `<h4 class="m-auto"><i class="fa fa-check" aria-hidden="true"></i>
+//         document.getElementById('showSucessMessage').innerHTML = `< h4 class="m-auto" > <i class="fa fa-check" aria-hidden="true"></i>
 //                   Message Has been Send Successfully...</h4>`
 //       }
 //       function hidingScsMsg() {
@@ -188,30 +191,31 @@ attachandSendImgAPI = () => {
 //           "caption": `${messageContent}`
 //         },
 //       }
-//       const result = fetch('https://graph.facebook.com/v17.0/116168451372633/messages/', {
+//       const result = fetch('https://graph.facebook.com/v17.0/104022815935352/messages/', {
 //         method: 'POST',
 //         headers: {
-//           Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+//           Authorization: `Bearer zxcvbnmlkjhgfdswertyunbnbzvxcvbsagfjkfdjkjhkjwouoriuhsdd
+WHATSAAP_TOKEN = EAAWqeZCMrJ6sBO0X7XRm9sUzT9VDnllTw54ul2YUHhh5UW8IdzCWZAQLSsNomFx6cBQJbWt7Kzsad6MnAE8Ge64EnMRALBpirjamhEXC56gxj4eZBrCV2BQoNZAkb2ZCPs8ZCEm5iq5DFvVFOhRgVo9NCx7z9TuogsSliZBv4wqrvQdm14DnzI8HyZAUkmT5yJYzwJgMwEWPcKRvA7DF`,
 //           "Content-Type": "application/json",
 //         },
 //         body: JSON.stringify(dataCollections)
 //       })
 //         .then((responses) => {
 //           if (responses.ok) {
-//             console.log(`Bulk messages sent successfully ${number}`);
+//             console.log(`Bulk messages sent successfully ${ number } `);
 //             if (result) {
 //               showingMessage();
 //             }
 
 //           } else {
-//             console.log(`Bulk messages not sent ${number}`);
+//             console.log(`Bulk messages not sent ${ number } `);
 //           }
 //         })
 //         .catch((error) => {
 //           console.error('Error sending bulk messages:', error);
 //         })
 //       function showingMessage() {
-//         document.getElementById('showSucessMessage').innerHTML = `<h4 class="m-auto"><i class="fa fa-check" aria-hidden="true"></i>
+//         document.getElementById('showSucessMessage').innerHTML = `< h4 class="m-auto" > <i class="fa fa-check" aria-hidden="true"></i>
 //                   Message Has been Send Successfully...</h4>`
 //       }
 //       function hidingScsMsg() {
@@ -279,7 +283,7 @@ attachandSendImgAPI = () => {
 
 // this code is not working properly check it latter
 sendCustomMsgWithIncludingMedia = () => {
-  
+
   const allAttachmentsInclude = document.getElementById('allAttachmentsInclude');
   const customMsgCheckbox = document.getElementById('customMsgCheckbox');
   // phoneNumberOfCustomMessageValidation();
@@ -287,15 +291,15 @@ sendCustomMsgWithIncludingMedia = () => {
 
   if (allAttachmentsInclude.checked || customMsgCheckbox) {
     attachandSendImgAPI();
-  }else{
+  } else {
     normalCustomMsg();
   }
   if (allAttachmentsInclude.checked) {
     sendBulkCustomMsgWithCsvAndAttachments();
-  }else{
+  } else {
     normalCustomMsg();
   }
-  
+
 
 }
 

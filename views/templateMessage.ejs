@@ -39,13 +39,13 @@
                                 </style>
                                 <!-- new line add by me  -->
                                 <div class="row">
-                                    
+
                                     <div class="col-12 grid-margin">
                                         <div class="manageCategoryInTempMSg">
                                             <a href="/contacts" class="button-12" id="manageCategoryBTN">Manage Category</a>
                                         </div>
                                         <div class="card">
-                                            
+
                                             <div class="card-body">
                                                 <h3 class="">Select Message Type</h3>
                                                 <p></p>
@@ -58,7 +58,7 @@
                                                 </div>
                                                 <!--action="/saveTemplateInDb" method="post"   -->
                                                 <form id="togleTemplateMsg" action="/sendtemplateMessages" method="post" enctype="multipart/form-data">
-                
+
                                                     <div
                                                         class="container mt-0 mb-5 p-5 col-10 shadow-lg text-secondary">
                                                         <h2 class="text-center mb-4">Template Message</h2>
@@ -85,7 +85,7 @@
 
                                                                 <label for="checkSElectCAtegory"><strong>Select Category</strong></label>
                                                             </div>
-                                                          
+
 
 
 
@@ -98,7 +98,7 @@
                                                             <p class="text-danger" id="phError"></p>
                                                         </div>
 
-                                
+
                                                         <div class="mb-3" id="uploadCsvForBulkMsg" style="display: none;">
                                                             <label for="excelFile" class="label" id="showFileName">
                                                               <i class="fa-solid fa-cloud-arrow-up"></i><br>Upload CSV file for bulk entry
@@ -135,7 +135,7 @@
                                                             Template</button> -->
                                                         <button type="submit" id="btn" class="btn w-100 btn-dark">Send
                                                             Message</button>
-                                                            
+
                                                     </div>
                                                 </form>
 
@@ -159,7 +159,7 @@
 
                                     // API URL
                                     const apiUrl =
-                                        "https://graph.facebook.com/v17.0/104022815935352/message_templates?fields=name,language=en_US,status=APPROVED";
+                                        "https://graph.facebook.com/v18.0/239145135951200/message_templates";
 
                                     // Fetch data from the API
                                     fetch(apiUrl, {
@@ -254,7 +254,7 @@
 
                         // Send the message using an appropriate API
                         // Replace 'YOUR_ACCESS_TOKEN' with your actual access token.
-                        fetch(`https://graph.facebook.com/v17.0/116168451372633/messages/`, {
+                        fetch(`https://graph.facebook.com/v17.0/104022815935352/messages/`, {
                             method: 'POST',
                             headers: {
                                 'Authorization': 'Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru',

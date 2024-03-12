@@ -18,7 +18,7 @@
          position: relative;
         margin-top: 0px !important;
         margin-bottom: 0px !important;
-        padding-left: 0 !important; 
+        padding-left: 0 !important;
 
       } */
 
@@ -62,26 +62,26 @@
                         <form action="/createCampaigns" method="post" id="campaignForm">
                           <div class="CreatemodalForm">
                             <h2 class="align-center">Create Campaign</h2>
-                        
+
                             <div class="form-group" id="phoneNumInputField">
                               <input type="text" name="phoneOfTemp" class="form-control p-2" id="phoneNumOfTemp" placeholder="Campaign Name" required>
                               <p class="text-danger" id="campaignname"></p>
                             </div>
-                        
+
                             <!-- radio buttons -->
                             <div class="bothCheckboxBtn">
                               <div class="form-check" id="showTmpltMsg" onclick="showSelectTemplate()">
                                 <input type="radio" name="messageType" onclick="showHideCampaignAttachments()" value="template" id="TemplateMessage">
                                 <label for="TemplateMessage"><strong class="text-muted">Template Message</strong></label>
                               </div>
-                        
+
                               <div class="form-check" onclick="showCustomMsgDiv()">
                                 <input type="radio" onclick="showHideCampaignAttachments()" name="messageType" value="custom" id="customMessage">
                                 <label for="customMessage"><strong class="text-muted">Custom Message</strong></label>
                               </div>
                             </div>
                             <!-- radio buttons -->
-                        
+
                             <!-- select template -->
                             <div class="form-group" id="hideSelectTEmplateDiv" style="display: none;">
                               <select name="selectTemp" id="tempOfBtn" class="w-100 text-secondary p-2">
@@ -90,11 +90,11 @@
                               </select>
                               <p class="text-danger" id="selError"></p>
                             </div>
-                        
 
 
 
-                          
+
+
 
 
                             <!-- image link -->
@@ -112,7 +112,7 @@
                               <textarea placeholder="Write your Message Here..." onkeyup="" name="customMsgData" id="customMsgInputField" class="form-control w-100 text-secondary p-2" spellcheck="false"></textarea>
                               <p class="text-danger" id="customFieldError"></p>
                             </div>
-                        
+
 
 
 
@@ -124,12 +124,12 @@
                               <input class="form-control w-50" id="excelFile" type="file" accept=".xlsx" value="">
                               <p class="text-danger" id="attachFileError"></p>
                             </div>
-                        
+
                             <button class="button-12" type="submit">Submit</button>
                           </div>
                         </form>
-                        
-                        
+
+
 
                       </div>
 
@@ -214,13 +214,13 @@
 <script>
   document.getElementById('hideAndShowFileUploader').style.display='none';
   document.getElementById('hideshowCamppaignAttachment').style.display='none';
-  
+
   toggleIMGSection=()=>{
     if(document.getElementById("imgRadioBtn").checked){
       document.getElementById('hideAndShowFileUploader').display='block';
     }
   }
-  if(document.getElementById('imgRadioBtn').checked){ 
+  if(document.getElementById('imgRadioBtn').checked){
      document.getElementById('showFileName').display='block';
   }
     showHideCampaignAttachments=()=>{

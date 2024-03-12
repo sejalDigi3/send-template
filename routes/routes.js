@@ -912,7 +912,7 @@ router.post("/saveAPICredentials", auth, async (req, res) => {
     }
 
     // Make request to Facebook Graph API
-    const GRAPH_API_URL = `https://graph.facebook.com/v17.0/${extractedNumber}?fields=verified_name,code_verification_status,display_phone_number,quality_rating,id`;
+    const GRAPH_API_URL = `https://graph.facebook.com/v18.0/${extractedNumber}?fields=verified_name,code_verification_status,display_phone_number,quality_rating,id`;
     const response = await fetch(GRAPH_API_URL, {
       headers: {
         Authorization: `Bearer ${BearerToken}`,
@@ -1056,90 +1056,6 @@ router.get("/viewAllTemplates", auth, (req, res) => {
 
 
 
-//custom message sending route
-// router.post("/sendCustomMessage", upload.single('extractExcel'), async (req, res) => {
-//   const sameBtnValue = req.body.sameBtn;
-//   const attachBtnValue = req.body.attachbtn;
-//   const phoneNumbers = req.body.mobileNumber;
-//   const getMsg = req.body.customMsgData;
-//   const allPhoneNumbers = phoneNumbers.split(',');
-//   console.log(`these are the phone numbers ${allPhoneNumbers}}`);
-//   if (sameBtnValue.includes("NumbersInput") && attachBtnValue === "imageSelected") {
-//     try {
-//       // Extract data from the request
-//       const mobileNumbers = req.body.mobileNumber.split(',');
-//       const captionss = req.body.customMsgData;
-//       // const imageLink = req.file ? req.file.path : req.body.uploadOnlyIMG;
-//       const imageLink = req.file ? req.file.path : (req.body.uploadOnlyIMG ? req.body.uploadOnlyIMG : undefined);
-
-//       // Prepare the message payload
-//       const messagePayload = {
-//         messaging_product: "whatsapp",
-//         recipient_type: "individual",
-//         to: mobileNumbers,
-//         type: "image",
-//         image: {
-//           link: imageLink,
-//           caption: captionss
-//         }
-//       };
-//       console.log('Request Payload:', messagePayload);
-
-//       // Make a request to the Facebook Graph API
-//       const response = await axios.post('https://graph.facebook.com/v17.0/116168451372633/messages/', messagePayload, {
-//         headers: {
-//           'Authorization': 'Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru', // Replace with your actual access token
-//           'Content-Type': 'application/json',
-//         },
-//       });
-
-//       // Handle the API response as needed
-//       console.log('API Response:', response.data);
-//       res.status(200).json({ success: true, message: 'Message sent successfully' });
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ success: false, message: 'Error sending message' });
-//     }
-//   }
-
-//   // dont do anything here this is working...
-//   else {
-//     for (const phoneNumber of allPhoneNumbers) {
-//       try {
-//         const response = await axios.post(
-//           'https://graph.facebook.com/v17.0/116168451372633/messages',
-//           {
-//             messaging_product: "whatsapp",
-//             recipient_type: "individual",
-//             to: phoneNumber.trim(), // Remove any leading/trailing whitespace
-//             type: "text",
-//             text: {
-//               body: `${getMsg}`
-//             },
-//           },
-//           {
-//             headers: {
-//               Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
-//               "Content-Type": "application/json",
-//             },
-//           }
-//         );
-//         // customMessageContent
-//         const savingCustomMessageInDB = new customMessageContent({
-//           mobileNumber: phoneNumbers,
-//           customMsgData: getMsg
-//         })
-//         await savingCustomMessageInDB.save();
-//         console.log(`this is the only message : ${response}`);
-//         console.log(`Message sent to ${phoneNumber}`);
-//         // console.log('message is saved in the database...');
-//       } catch (error) {
-//         console.error(`Error sending message to ${phoneNumber}: ${error.message}`);
-//       }
-//     }
-//   }
-// });
-
 router.get("/viewAllreports", auth, (req, res) => {
   try {
     res.render("reports");
@@ -1161,8 +1077,47 @@ module.exports = router;
 //   }
 // });
 
+// router.post('/sendtemplateMessage', async (req, res) => {
+//   try {
+//     const { recipients, selectTemp } = req.body;
+//     const phoneNumberArray = recipients.split(',').map(phone => phone.trim());
+//     console.log(req.body);
+//     console.log(phoneNumberArray, "phoneNumberArray");
+//     for (const recipient of phoneNumberArray) {
+//       console.log("rec", recipient);
+//       const response = await axios.post(
+//         'https://graph.facebook.com/v19.0/239145135951200/messages',
+//         {
+//           messaging_product: "whatsapp",
+//           to: recipient,
+//           type: "template",
+//           template: {
+//             name: selectTemp,
+//             language: {
+//               code: "en"
+//             }
+//           }
+//         },
+//         {
+//           headers: {
+//             Authorization: 'Bearer EAAWqeZCMrJ6sBADM8i3BxBDr1jZBd9pdakNpZBUv7bjBZBOhmbHAFGYDOZA09VnwuE7VtJgMyksnmoMgJBtVFfL1cUkiJx43q1ZAPTPdzL4VJVYRMAdXyysuJtXI7T0T8HGuNJFDGm6YsH1k85xh0khvyic2CiGbcMmcBpvOa4jGrNn7L1bsyJ4wZC8z4eKO3e7thrjycvvigZDZD',
+//             "Content-Type": "application/json"
+//           },
+//         }
+//       );
+//       console.log(`Message sent to ${recipient}`);
+//     }
 
-// router.post('/sendtemplateMessages', upload.single('extractExcel'), auth, async (req, res) => {
+//     res.status(200).send('Messages sent successfully');
+//   } catch (error) {
+//     console.error('Error sending messages:', error);
+//     res.status(500).send('Error sending messages');
+//   }
+// });
+
+
+// //commentout for sometime
+// router.post('/sendtemplateMessages', async (req, res) => {
 //   const { sameBtn } = req.body; // Assuming you're using body-parser middleware
 
 //   if (sameBtn === 'multipleNumbers') {
@@ -1172,7 +1127,7 @@ module.exports = router;
 //     for (const phoneNumber of allPhoneNumbers) {
 //       try {
 //         const response = await axios.post(
-//           'https://graph.facebook.com/v17.0/116168451372633/messages',
+//           'https://graph.facebook.com/v18.0/116168451372633/messages',
 //           {
 //             messaging_product: "whatsapp",
 //             to: phoneNumber.trim(), // Remove any leading/trailing whitespace
@@ -1211,6 +1166,7 @@ module.exports = router;
 //   }
 //   else if (sameBtn === 'bulkUploadInput') {
 //     const messageContent = req.body.selectTemp;
+//     console.log(req.body);
 //     const excelFile = req.file;
 //     if (excelFile) {
 //       try {
@@ -1233,7 +1189,7 @@ module.exports = router;
 //           const number = entry.mobile;
 //           try {
 //             const response = await axios.post(
-//               'https://graph.facebook.com/v17.0/116168451372633/messages',
+//               'https://graph.facebook.com/v18.0/116168451372633/messages',
 //               {
 //                 messaging_product: "whatsapp",
 //                 to: number,
@@ -1277,7 +1233,7 @@ module.exports = router;
 //     for (const phoneNumber of mobileNumbersOfSelectedCategory) {
 //       try {
 //         const response = await axios.post(
-//           'https://graph.facebook.com/v17.0/116168451372633/messages',
+//           'https://graph.facebook.com/v18.0/116168451372633/messages',
 //           {
 //             messaging_product: "whatsapp",
 //             to: phoneNumber, // Remove any leading/trailing whitespace
@@ -1308,6 +1264,170 @@ module.exports = router;
 //   }
 //   res.send('message has been sent successfully!');
 // });
+
+
+//now
+router.post('/sendtemplateMessages', upload.single('extractExcel'), auth, async (req, res) => {
+  const { sameBtn } = req.body; // Assuming you're using body-parser middleware
+
+  if (sameBtn === 'multipleNumbers') {
+    const phoneNumbers = req.body.phoneOfTemp;
+    const messageContent = req.body.selectTemp;
+    const allPhoneNumbers = phoneNumbers.split(',');
+    for (const phoneNumber of allPhoneNumbers) {
+      try {
+        const response = await axios.post(
+          'https://graph.facebook.com/v18.0/243678098829351/messages',
+          {
+            messaging_product: "whatsapp",
+            to: phoneNumber.trim(), // Remove any leading/trailing whitespace
+            type: "template",
+            template: {
+              name: messageContent,
+              language: {
+                code: "en",
+              },
+            },
+          },
+          {
+            headers: {
+              Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const savingTemplateMessageInDB = new templateMsg({
+          phoneOfTemp: phoneNumbers,
+          selectTemp: messageContent
+        })
+        await savingTemplateMessageInDB.save();
+        console.log(`Message sent to ${phoneNumber}`);
+        console.log(`See here phone numbers ${phoneNumbers}`)
+        console.log(`See here selected template name ${messageContent}`)
+      } catch (error) {
+        // console.error(`Error sending message to ${phoneNumber}:`, error.response?.status, error.response?.data);
+        console.log(`See here phone numbers ${phoneNumbers}`)
+        console.log(`See here selected template name ${messageContent}`);
+        console.log(`See here Error ${error}`);
+      }
+    }
+    console.log('Mobile Number is checked');
+  }
+  else if (sameBtn === 'bulkUploadInput') {
+    const messageContent = req.body.selectTemp;
+    const excelFile = req.file;
+    if (excelFile) {
+      try {
+        // Process the Excel file using exceljs
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = await workbook.xlsx.load(excelFile.buffer);
+        const firstSheet = worksheet.getWorksheet(1);
+        const jsonData = [];
+        firstSheet.eachRow((row, rowNumber) => {
+          if (rowNumber > 1) { // Skip header row
+            const name = row.getCell(1).value;
+            const mobile = row.getCell(2).value;
+            jsonData.push({ name, mobile });
+          }
+        });
+        console.log('Received Excel file:', excelFile.originalname);
+        console.log('Excel File Data:');
+        console.log(jsonData);
+        for (const entry of jsonData) {
+          const number = entry.mobile;
+          try {
+            const response = await axios.post(
+              'https://graph.facebook.com/v18.0/243678098829351/messages',
+              {
+                messaging_product: "whatsapp",
+                to: number,
+                type: "template",
+                template: {
+                  name: messageContent,
+                  language: {
+                    code: "en",
+                  },
+                },
+              },
+              {
+                headers: {
+                  Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            console.log(`Message sent to ${number}`);
+            console.log(`${numbers} see here ${error} mobile numbers ${messageContent}`)
+          } catch (error) {
+            console.error(`Error sending message to ${number}: ${messageContent} ${error.message}`);
+          }
+        }
+      } catch (error) {
+        console.error('Error processing Excel file:', error);
+      }
+    }
+    // Handle bulk upload saving logic here
+  } // save message with select category contacts
+  else if (sameBtn === 'selectedCategoryInput') {
+    const messageContent = req.body.selectTemp;
+    const showInSelectBox = await NumberModel.find({});
+    const selectedCategory = req.body.category;
+    console.log('Selected Category:', selectedCategory);
+    const mobileNumbersOfSelectedCategory = showInSelectBox
+      .filter(item => item.categories === selectedCategory)
+      .map(item => item.mobile);
+    console.log('Selected Category:', selectedCategory);
+    console.log('Mobile Numbers of Selected Category:', mobileNumbersOfSelectedCategory);
+    for (const phoneNumber of mobileNumbersOfSelectedCategory) {
+      try {
+        const response = await axios.post(
+          'https://graph.facebook.com/v18.0/243678098829351/messages',
+          {
+            messaging_product: "whatsapp",
+            to: phoneNumber,
+            type: "template",
+            template: {
+              name: messageContent,
+              language: {
+                code: "en",
+              },
+            },
+          },
+          {
+            headers: {
+              Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(`Message sent to ${phoneNumber} messageContent : ${messageContent}`);
+      } catch (error) {
+        console.error(`Error sending message to ${phoneNumber}: ${messageContent} ${error.message}`);
+      }
+    }
+    console.log('Select Category is checked');
+    // Handle select category logic here
+  } else {
+    console.log('No radio button is checked');
+  }
+  res.send(`
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Sent Successfully</title>
+  </head>
+  <body>
+  <center><h1>Message has been sent successfully!</h1></center>
+  </body>
+  </html>
+`);
+
+  // res.send('message has been sent successfully!');
+});
+
 
 // router.get("/templateMsgHistory", auth, async (req, res) => {
 //   const ITEMS_PER_PAGE = 5; // Number of items to display per page
@@ -1452,5 +1572,90 @@ module.exports = router;
 //   } catch (error) {
 //     console.error('Error saving API credentials:', error);
 //     return res.status(500).json({ error: 'Internal server error' });
+//   }
+// });
+
+//cut
+// router.get('/sendtemplatemessagess/:phoneNumber/:selectTemp/:otpCode', async (req, res) => {
+//   try {
+//     const { phoneNumber, selectTemp, otpCode } = req.params;
+
+//     const response = await axios.post(
+//       `https://graph.facebook.com/v18.0/243678098829351/messages?phone=${phoneNumber}`,
+//       {
+//         messaging_product: "whatsapp",
+//         to: phoneNumber,
+//         type: "template",
+//         template: {
+//           name: selectTemp,
+//           language: {
+//             "code": "en"
+//           },
+//           components: [
+//             {
+//               type: "body",
+//               "parameters": [
+//                 {
+//                   "type": "text",
+//                   "text": otpCode,
+//                 }
+//               ]
+//             }
+//           ],
+//         }
+//       },
+//       {
+//         headers: {
+//           Authorization: 'Bearer    EAAWqeZCMrJ6sBO2nZCLcUirtdE77KegWssKhPymZAtDitZBR29TwEQ9INU5NQXOURqcieZBKg8B4ZCSszXQX3yjBkB8VrZBey0t7CD2wzCPFTHYJjhNDcSOZACJtXlPdrwpqZA27QCsweZBssZBClpJFSMHPhTbuD6QjkGzzZBQBu17ppvr1SnzR6DjV1OO3vY8MjHYuffdcMNrlF9H6L12BVQkNhZBnZCrZAHjr1eU',
+//           "Content-Type": "application/json"
+//         },
+//       }
+//     );
+
+//     console.log("Response:", response.data);
+//     res.status(200).send('Message sent successfully');
+//   } catch (error) {
+//     console.error('Error sending message:', error.response.data);
+//     res.status(500).send('Error sending message');
+//   }
+// });
+
+
+// //copy working with r token
+// router.post('/sendtemplateMessage', async (req, res) => {
+//   try {
+//     const { recipients, selectTemp } = req.body;
+//     const phoneNumberArray = recipients.split(',').map(phone => phone.trim());
+//     console.log(req.body);
+//     console.log(phoneNumberArray, "phoneNumberArray");
+//     for (const recipient of phoneNumberArray) {
+//       console.log("rec", recipient);
+//       const response = await axios.post(
+//         'https://graph.facebook.com/v18.0/243678098829351/messages',
+//         {
+//           messaging_product: "whatsapp",
+//           to: recipient,
+//           type: "template",
+//           template: {
+//             name: selectTemp,
+//             language: {
+//               code: "en"
+//             }
+//           }
+//         },
+//         {
+//           headers: {
+//             Authorization: 'Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru',
+//             "Content-Type": "application/json"
+//           },
+//         }
+//       );
+//       console.log(`Message sent to ${recipient}`);
+//     }
+
+//     res.status(200).send('Messages sent successfully');
+//   } catch (error) {
+//     console.error('Error sending messages:', error);
+//     res.status(500).send('Error sending messages');
 //   }
 // });

@@ -22,6 +22,7 @@
                                     <h3 class="page-title">
                                         <span class="page-title-icon bg-gradient-primary text-white me-2">
                                             <i class="mdi mdi-home"></i>
+
                                             <!-- <img src="/static/assets/images/home-gradient.png" alt="" style="width: 35px;"> -->
                                         </span> All Templates
                                     </h3>
@@ -30,7 +31,33 @@
                                     <div class="col-lg-12 grid-margin stretch-card">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h4 class="card-title">All Templates</h4>
+                                              <div>
+                                                <label for="filterType">Select Filter Type</label>
+  <div>
+<select id="statusFilter">
+    <option value="">Select Status</option>
+    <option value="APPROVED">Approved</option>
+    <option value="REJECTED">Rejected</option>
+    <option value="PENDING">pending</option>
+    <!-- Add more options as needed -->
+</select>
+
+
+<select id="categoryFilter">
+    <option value="">Select Category</option>
+    <option value="UTILITY">Utility</option>
+    <option value="MARKETING">Marketing</option>
+    <option value="AUTHENTICATION">Authentication</option>
+</select>
+
+ <div class="col-md-3">
+                  <button class="btn btn-primary mt-4" onclick="applyFilter()">Apply Filter</button>
+                </div>
+
+</div >
+
+                                              </div>
+
 
                                                 <table id="data-table" class="table">
                                                     <thead>
@@ -39,6 +66,9 @@
                                                             <th scope="col">Name</th>
                                                             <th scope="col">Status</th>
                                                             <th scope="col">Component Body Text</th>
+                                                              <th scope="col">Country</th>
+                                                                <th scope="col">Category</th>
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -55,23 +85,86 @@
                                             </div>
 
                                                 <script>
-                                                    const apiUrl = 'https://graph.facebook.com/v17.0/104022815935352/message_templates';
+                                                    const apiUrl =`https://graph.facebook.com/v19.0/104022815935352/message_templates`;
                                                     const itemsPerPage =10; // Number of items to display per page
                                                     let currentPage = 1;
                                                     let totalData = [];
                                                     const tableBody = document.querySelector('#data-table tbody');
                                                     const pageSelect = document.getElementById('pageSelect');
+const statusFilter = document.getElementById('statusFilter').value;
+// const languageFilter = document.getElementById('languageFilter').value;
+// const categoryFilter = document.getElementById('categoryFilter').value;
+console.log(statusFilter,"djwjd");
+    switch (statusFilter) {
+        case 'approved':
+            status = 'APPROVED';
+            break;
+        case 'pending':
+            status = 'PENDING';
+            break;
+        case 'rejected ':
+            status = 'REJECTED';
+            break;
+        default:
+            // Default to day if filter type is not recognized
+            status  = 'APPROVED';
+            break;
+    }
 
-                                                    async function fetchData(page) {
-                                                        try {
-                                                            const response = await fetch(`${apiUrl}?page=${page}&limit=${itemsPerPage}`, {
-                                                                headers: {
-                                                                    Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+
+
+// Define a variable to store the category filter value
+const categoryFilter = document.getElementById('categoryFilter').value;
+
+
+                                                    async function fetchData(page,statusFilter,categoryFilter) {
+
+           let status;
+    switch (statusFilter) {
+        case 'APPROVED':
+            status = 'APPROVED';
+            break;
+        case 'REJECTED':
+            status = 'REJECTED';
+            break;
+        case 'PENDING':
+            status = 'PENDING';
+            break;
+        default:
+            status = 'APPROVED';
+            break;
+    }
+
+    // Implement the switch case statement for the category filter inside the fetchData function
+let category;
+switch (categoryFilter) {
+    case 'UTILITY':
+        category = 'UTILITY';
+        break;
+    case 'MARKETING':
+        category = 'MARKETING';
+        break;
+    case 'AUTHENTICATION':
+        category = 'AUTHENTICATION';
+        break;
+    default:
+        category = 'UTILITY'; // Default to empty string if filter type is not recognized
+        break;
+}
+
+
+    try {
+
+      const response = await fetch(`${apiUrl}?status=${status}&category=${category}&page=${page}&limit=${itemsPerPage}`, {
+            headers: {
+                Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
                                                                     "Content-Type": "application/json",
-                                                                }
-                                                            });
-                                                            const data = await response.json();
+            }
+        });
 
+
+const data = await response.json();
+console.log("gdweugfew",data);
                                                             if (data.data && data.data.length > 0) {
                                                                 totalData = data.data; // Store all data
                                                                 tableBody.innerHTML = ''; // Clear the table body
@@ -86,11 +179,14 @@
                                                                     const nameCell = row.insertCell(1);
                                                                     const statusCell = row.insertCell(2);
                                                                     const bodyTextCell = row.insertCell(3);
+                                                                    const language=row.insertCell(4);
+                                                                    const Category = row.insertCell(5)
 
                                                                     idCell.textContent = startIndex + index + 1; // Calculate the ID
                                                                     nameCell.textContent = item.name || 'N/A';
                                                                     statusCell.textContent = item.status || 'N/A';
-
+                                                                    Category.textContent=item.category || 'N/A';
+                                                                    language.textContent=item.language || 'N/A';
                                                                     // Find the 'BODY' component in the 'components' array
                                                                     const bodyComponent = item.components.find(component => component.type === 'BODY');
                                                                     if (bodyComponent) {
@@ -108,7 +204,6 @@
                                                                 populatePageSelect();
 
                                                             } else {
-                                                                // ghvnvnbvnbvn
                                                                 console.error('No data found.');
                                                             }
                                                         } catch (error) {
@@ -154,6 +249,25 @@
 
                                                     // Initial data load
                                                     fetchData(currentPage);
+
+//                                                     function applyFilter() {
+//     const statusSearchText = document.getElementById('statusFilter').value
+//     // const languageSearchText =  document.getElementById('languageFilter').value
+//     // const categorySearchText = document.getElementById('categoryFilter').value  ;
+// // console.log(statusSearchText,languageSearchText,categorySearchText);
+//     // fetchDataByFilter(filterType);
+// }
+// Implement the applyFilter function to update the statusFilter value and fetch data
+function applyFilter() {
+    const statusSearchText = document.getElementById('statusFilter').value;
+        const categorySearchText = document.getElementById('categoryFilter').value;
+    // const languageSearchText =  document.getElementById('languageFilter').value
+    // const categorySearchText = document.getElementById('categoryFilter').value  ;
+    // console.log(statusSearchText,languageSearchText,categorySearchText);
+    currentPage = 1; // Reset current page to 1 when applying filter
+    fetchData(currentPage, statusSearchText,categorySearchText);
+
+    }
                                                 </script>
 
                                             </div>

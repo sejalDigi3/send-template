@@ -17,7 +17,12 @@
                     </span>Template Messages
                   </h3>
                 </div>
-  
+
+<div class="SucessMsgTemplate d-flex justify-content-center" id="showSucessMessage">
+  <!-- Success message will be displayed here -->
+</div>
+
+
 
                 <!-- new line add by me  -->
                 <div class="row">
@@ -35,6 +40,8 @@
                         </div>
                         <!----------------------custom message starts------------------------->
                         <!-- sendCustomMsgWithIncludingMedia();  sendCallOrActionResponse(); -->
+
+
                         <form id="togleCustomMsg" action="/sendCustomMessage" method="post" enctype="multipart/form-data">
                           <div>
 
@@ -146,7 +153,7 @@
                                     <input onchange="toggleAttachmentInputBoxVPI()" type="radio" value="" name="" id="uploadImage">
                                     <label for="uploadImage"><strong>
                                             </strong> <span class="text-muted">
-                                            </span></label> 
+                                            </span></label>
                                 </div>
 
                                   </div> -->
@@ -231,7 +238,18 @@
                             document.getElementById('hideWhilePressOnBulk').style.display = 'none';
 
                           }
-
+  // Function to show success message
+  function showSuccessMessage(message) {
+    const successContainer = document.getElementById('showSucessMessage');
+    // Set the success message content
+    successContainer.innerHTML = `
+      <div class="alert alert-success" role="alert">
+        ${message}
+      </div>
+    `;
+    // Scroll to the success message container
+    successContainer.scrollIntoView({ behavior: 'smooth' });
+  }
 
                           // function displayFileName() {
                           //               const fileInput = document.getElementById('customMsgExcelFile');
@@ -243,6 +261,10 @@
                           //                 uploadedFileName.textContent = "";
                           //               }
                           //             }
+
+                          // Example: Add event listener to the form for submission
+const form = document.getElementById('togleCustomMsg'); // Assuming your form has this ID
+form.addEventListener('submit', handleSubmitForm);
                         </script>
                         <!---------------------- custom message  Ends------------------------->
 

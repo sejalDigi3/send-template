@@ -23,7 +23,7 @@
                       </div>
                       <div class="parentContainerOfAllBoxes">
 
-                     
+
                       <!-- add custom code here -->
                       <!-- template message cart -->
                       <div class="col-md-4 stretch-card grid-margin">
@@ -35,14 +35,14 @@
                             height: 100%;">
                             <h4 class="font-weight-normal mb-3">Template Messages<i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
                             </h4>
-                            
+
                               <h1 id="templateMSGCount" class="mb-5"> <%= countDetails %></h1>
-                             
+
                             <h6 class="card-text">Total <%= countDetails %> Template Messages Has Been Sent by this Account</h6>
                           </div>
                         </div>
                       </div>
-                      
+
                       <!-- custom messag cart -->
                       <div class="col-md-4 stretch-card grid-margin">
                         <div class="card bg-gradient-danger card-img-holder text-white">
@@ -78,18 +78,133 @@
                       </div>
 
                     </div>
-                      <!-- add custom code here -->
+                  <div class="card-body">
+                                        <h2>Business Details</h2>
+                                        <table class="table" id="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <!-- <th>Field</th> -->
+                                                    <!-- <th>Value</th> -->
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
                     </div>
                    <%- include('partials/footer.ejs') %>
                   </div>
             </div>
     </div>
-    <script>
-      window.history.pushState(null, null, window.location.href);
+
+      <script>
+           window.history.pushState(null, null, window.location.href);
       window.onpopstate = function () {
           window.history.pushState(null, null, window.location.href);
       };
-  </script>
+
+
+     const GRAPH_API_URL = 'https://graph.facebook.com/v17.0/116168451372633?fields=verified_name,code_verification_status,display_phone_number,quality_rating,id';
+
+const tableBody = document.querySelector('#data-table tbody');
+
+fetch(GRAPH_API_URL,{
+    headers: {
+        Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+        "Content-Type": "application/json",
+      }
+})
+    .then(response => response.json())
+    .then(data => {
+        const fieldsToShow = [
+            'verified_name',
+            'code_verification_status',
+            'display_phone_number',
+            'quality_rating',
+            'id'
+        ];
+
+        fieldsToShow.forEach(fieldName => {
+            const row = document.createElement('tr');
+            const fieldCell = document.createElement('td');
+            fieldCell.textContent = fieldName;
+            const valueCell = document.createElement('td');
+            valueCell.textContent = data[fieldName] || 'N/A';
+
+            row.appendChild(fieldCell);
+            row.appendChild(valueCell);
+            tableBody.appendChild(row);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+
+const subscribedAppsTableBody = document.querySelector('#subscribed-apps-table tbody');
+fetch('https://graph.facebook.com/v19.0/104022815935352/subscribed_apps', {
+    headers: {
+        Authorization: `Bearer EAAWqeZCMrJ6sBO0X7XRm9sUzT9VDnllTw54ul2YUHhh5UW8IdzCWZAQLSsNomFx6cBQJbWt7Kzsad6MnAE8Ge64EnMRALBpirjamhEXC56gxj4eZBrCV2BQoNZAkb2ZCPs8ZCEm5iq5DFvVFOhRgVo9NCx7z9TuogsSliZBv4wqrvQdm14DnzI8HyZAUkmT5yJYzwJgMwEWPcKRvA7DF`,
+        "Content-Type": "application/json",
+    }
+})
+.then(response => response.json())
+.then(data => {
+  console.log(data,"ddddddddddddd");
+    data.data.forEach(app => {
+        const row = document.createElement('tr');
+        const nameCell = document.createElement('td');
+        nameCell.textContent = app.whatsapp_business_api_data.name || 'N/A';
+        const linkCell = document.createElement('td');
+        const link = document.createElement('a');
+        link.href = app.whatsapp_business_api_data.link;
+        link.target = '_blank';
+        link.textContent = app.whatsapp_business_api_data.link;
+        linkCell.appendChild(link);
+
+        row.appendChild(nameCell);
+        row.appendChild(linkCell);
+        subscribedAppsTableBody.appendChild(row);
+    });
+})
+.catch(error => {
+    console.error('Error fetching subscribed apps data:', error);
+});
+
+// JavaScript to fetch and populate owned WhatsApp business accounts data
+const ownedWhatsAppAccountsTableBody = document.querySelector('#owned-whatsapp-accounts-table tbody');
+
+fetch('https://graph.facebook.com/v19.0/1285081532254870/owned_whatsapp_business_accounts', {
+    headers: {
+        Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+
+        "Content-Type": "application/json",
+    }
+})
+.then(response => response.json())
+.then(data => {
+    data.data.forEach(account => {
+        const row = document.createElement('tr');
+        const businessIdCell = document.createElement('td');
+        businessIdCell.textContent = account.id || 'N/A';
+        const businessNameCell = document.createElement('td');
+        businessNameCell.textContent = account.name || 'N/A';
+        const messageTemplateNamespaceCell = document.createElement('td');
+        messageTemplateNamespaceCell.textContent = account.message_template_namespace || 'N/A';
+
+        row.appendChild(businessIdCell);
+        row.appendChild(businessNameCell);
+        row.appendChild(messageTemplateNamespaceCell);
+        ownedWhatsAppAccountsTableBody.appendChild(row);
+    });
+})
+.catch(error => {
+    console.error('Error fetching owned WhatsApp business accounts data:', error);
+});
+
+
+
+
+
+
+    </script>
 </body>
 
 <%- include('partials/scripts.ejs') %>
