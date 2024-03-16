@@ -1,286 +1,591 @@
-<%- include('partials/head.ejs') %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head.ejs') %>
+    <style>
+      .card {
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .gm {
+        margin-bottom: 2.5rem;
+      }
+      .grid-margin,
+      .purchase-popup {
+        margin: 2.5rem;
+      }
 
-    <body>
-        <style>
-            .table td {
-                       max-width: 200px;
-                       /* Adjust the width as needed */
-                       white-space: nowrap;
-                       overflow: hidden;
-                       text-overflow: ellipsis;
-                       white-space: normal;
-                       word-wrap: break-word;
-                   }
-       </style>
-        <div class="container-scroller">
-            <%- include('partials/navbar.ejs') %>
-                <div class="container-fluid page-body-wrapper">
-                    <%- include('partials/sidebar.ejs') %>
-                        <div class="main-panel">
-                            <div class="content-wrapper">
-                                <div class="page-header">
-                                    <h3 class="page-title">
-                                        <span class="page-title-icon bg-gradient-primary text-white me-2">
-                                            <i class="mdi mdi-home"></i>
+      .card {
+        margin-left: -4px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .card-body {
+        padding: 20px;
+      }
 
-                                            <!-- <img src="/static/assets/images/home-gradient.png" alt="" style="width: 35px;"> -->
-                                        </span> All Templates
-                                    </h3>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12 grid-margin stretch-card">
-                                        <div class="card">
-                                            <div class="card-body">
-                                              <div>
-                                                <label for="filterType">Select Filter Type</label>
-  <div>
-<select id="statusFilter">
-    <option value="">Select Status</option>
-    <option value="APPROVED">Approved</option>
-    <option value="REJECTED">Rejected</option>
-    <option value="PENDING">pending</option>
-    <!-- Add more options as needed -->
-</select>
+      .card-text {
+        margin-bottom: 10px;
+      }
+      /* New styles for improved UI/UX */
+      .filter-container {
+        margin-bottom: 20px;
+      }
 
+      .filter-container select {
+        margin-right: 10px;
+      }
 
-<select id="GroupFilter">
-    <option value="">Select Group</option>
-    <option value="UTILITY">Utility</option>
-    <option value="MARKETING">Marketing</option>
-    <option value="AUTHENTICATION">Authentication</option>
-</select>
+      .pagination-container {
+        margin-top: 20px;
+        text-align: center;
+      }
 
- <div class="col-md-3">
-                  <button class="btn btn-primary mt-4" onclick="applyFilter()">Apply Filter</button>
-                </div>
+      .pagination-container button {
+        margin: 0 5px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
 
-</div >
+      .pagination-container button:hover {
+        background-color: #0056b3;
+      }
 
-                                              </div>
+      .pagination-container span {
+        font-weight: bold;
+        margin: 0 10px;
+      }
+    </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const apiUrl = `https://graph.facebook.com/v19.0/104022815935352/message_templates`;
+        const itemsPerPage = 10; // Display 10 items per page
+        let currentPage = 1;
+        let totalData = [];
+        const templateContainer = document.getElementById("templateContainer");
+        const pageSelect = document.getElementById("pageSelect");
 
+        // async function fetchData(page, statusFilter, GroupFilter) {
+        //     try {
+        //         let status = '';
+        //         switch (statusFilter) {
+        //             case 'APPROVED':
+        //                 status = 'APPROVED';
+        //                 break;
+        //             case 'REJECTED':
+        //                 status = 'REJECTED';
+        //                 break;
+        //             case 'PENDING':
+        //                 status = 'PENDING';
+        //                 break;
+        //             default:
+        //                 status = '';
+        //                 break;
+        //         }
 
-                                                <table id="data-table" class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">ID</th>
-                                                            <th scope="col">Name</th>
-                                                            <th scope="col">Status</th>
-                                                            <th scope="col">Component Body Text</th>
-                                                              <th scope="col">Country</th>
-                                                                <th scope="col">Group</th>
+        //         let category = '';
+        //         switch (GroupFilter) {
+        //             case 'UTILITY':
+        //                 category = 'UTILITY';
+        //                 break;
+        //             case 'MARKETING':
+        //                 category = 'MARKETING';
+        //                 break;
+        //             case 'AUTHENTICATION':
+        //                 category = 'AUTHENTICATION';
+        //                 break;
+        //             default:
+        //                 category = '';
+        //                 break;
+        //         }
 
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <!-- Data will be inserted here -->
-                                                    </tbody>
-                                                </table>
-                                                <div class="selectPageOptionAndPaging">
-                                                    <select id="pageSelect"></select>
-                                                </div>
-                                                <div id="pagination">
-                                                    <button class="button-12" id="prevButton">Previous</button>
-                                                    <span id="pageInfo">Page 1</span>
-                                                    <button class="button-12" id="nextButton">Next</button>
-                                            </div>
+        //         const response = await fetch(`${apiUrl}?status=${status}&category=${category}&page=${page}&limit=${itemsPerPage}`, {
+        //             headers: {
+        //                 Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+        //                 "Content-Type": "application/json",
+        //             }
+        //         });
+        //         const data = await response.json();
+        //         if (data.data && data.data.length > 0) {
+        //             totalData = data.data;
+        //             templateContainer.innerHTML = '';
+        //             totalData.forEach((item, index) => {
+        //                 const card = document.createElement('div');
+        //                 card.classList.add('col-lg-4', 'grid-margin', 'stretch-card');
+        //                 card.innerHTML = `
+        //                     <div class="card">
+        //                         <div class="card-body">
+        //                             <h5 class="card-title">${item.name || 'N/A'}</h5>
+        //                             <p class="card-text"><strong>Status:</strong> ${item.status || 'N/A'}</p>
+        //                             <p class="card-text"><strong>Group:</strong> ${item.category || 'N/A'}</p>
+        //                             <p class="card-text"><strong>Component Body Text:</strong> ${getBodyText(item) || 'N/A'}</p>
+        //                             <p class="card-text"><strong>Language:</strong> ${item.language || 'N/A'}</p>
+        //                         </div>
+        //                     </div>
+        //                 `;
+        //                 templateContainer.appendChild(card);
+        //             });
+        //             populatePageSelect();
+        //         } else {
+        //             console.error('No data found.');
+        //         }
+        //     } catch (error) {
+        //         console.error('Error fetching data:', error);
+        //     }
+        // }
 
-                                                <script>
-                                                    const apiUrl =`https://graph.facebook.com/v19.0/104022815935352/message_templates`;
-                                                    const itemsPerPage =10; // Number of items to display per page
-                                                    let currentPage = 1;
-                                                    let totalData = [];
-                                                    const tableBody = document.querySelector('#data-table tbody');
-                                                    const pageSelect = document.getElementById('pageSelect');
-const statusFilter = document.getElementById('statusFilter').value;
-// const languageFilter = document.getElementById('languageFilter').value;
-// const GroupFilter = document.getElementById('GroupFilter').value;
-console.log(statusFilter,"djwjd");
-    switch (statusFilter) {
-        case 'approved':
-            status = 'APPROVED';
-            break;
-        case 'pending':
-            status = 'PENDING';
-            break;
-        case 'rejected ':
-            status = 'REJECTED';
-            break;
-        default:
-            // Default to day if filter type is not recognized
-            status  = 'APPROVED';
-            break;
-    }
+        async function fetchData(
+          page,
+          statusFilter = "APPROVED",
+          GroupFilter = "",
+          language = "en"
+        ) {
+          console.log(page, statusFilter, GroupFilter, language);
+          try {
+            let status = statusFilter === "ALL" ? "" : statusFilter;
 
-
-
-// Define a variable to store the Group filter value
-const GroupFilter = document.getElementById('GroupFilter').value;
-
-
-                                                    async function fetchData(page,statusFilter,GroupFilter) {
-
-           let status;
-    switch (statusFilter) {
-        case 'APPROVED':
-            status = 'APPROVED';
-            break;
-        case 'REJECTED':
-            status = 'REJECTED';
-            break;
-        case 'PENDING':
-            status = 'PENDING';
-            break;
-        default:
-            status = 'APPROVED';
-            break;
-    }
-
-    // Implement the switch case statement for the Group filter inside the fetchData function
-let Group;
-switch (GroupFilter) {
-    case 'UTILITY':
-        Group = 'UTILITY';
-        break;
-    case 'MARKETING':
-        Group = 'MARKETING';
-        break;
-    case 'AUTHENTICATION':
-        Group = 'AUTHENTICATION';
-        break;
-    default:
-        Group = 'UTILITY'; // Default to empty string if filter type is not recognized
-        break;
-}
-
-
-    try {
-
-      const response = await fetch(`${apiUrl}?status=${status}&Group=${Group}&page=${page}&limit=${itemsPerPage}`, {
-            headers: {
-                Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
-                                                                    "Content-Type": "application/json",
+            let category = "";
+            switch (GroupFilter) {
+              case "UTILITY":
+                category = "UTILITY";
+                break;
+              case "MARKETING":
+                category = "MARKETING";
+                break;
+              case "AUTHENTICATION":
+                category = "AUTHENTICATION";
+                break;
+              default:
+                category = "";
+                break;
             }
+
+            const response = await fetch(
+              `${apiUrl}?status=${status}&category=${category}&page=${page}&limit=${itemsPerPage}&language=${language}`,
+              {
+                headers: {
+                  Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const data = await response.json();
+            if (data.data && data.data.length > 0) {
+              totalData = data.data;
+              templateContainer.innerHTML = "";
+              totalData.forEach((item, index) => {
+                const card = document.createElement("div");
+                card.classList.add("col-lg-4", "grid-margin", "stretch-card");
+                card.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${item.name || "N/A"}</h5>
+                            <p class="card-text"><strong>Status:</strong> ${
+                              item.status || "N/A"
+                            }</p>
+                            <p class="card-text"><strong>Group:</strong> ${
+                              item.category || "N/A"
+                            }</p>
+                            <p class="card-text"><strong>Component Body Text:</strong> ${
+                              getBodyText(item) || "N/A"
+                            }</p>
+                            <p class="card-text"><strong>Language:</strong> ${
+                              item.language || "N/A"
+                            }</p>
+                        </div>
+                    </div>
+                `;
+                templateContainer.appendChild(card);
+              });
+              populatePageSelect();
+            } else {
+              console.error("No data found.");
+            }
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        }
+
+        function getBodyText(item) {
+          const bodyComponent = item.components.find(
+            (component) => component.type === "BODY"
+          );
+          return bodyComponent ? bodyComponent.text : null;
+        }
+
+        function populatePageSelect() {
+          const pageCount = Math.ceil(totalData.length / itemsPerPage);
+          pageSelect.innerHTML = "";
+          for (let i = 1; i <= pageCount; i++) {
+            const option = document.createElement("option");
+            option.value = i;
+            option.textContent = `Page ${i}`;
+            pageSelect.appendChild(option);
+          }
+          pageSelect.value = currentPage;
+        }
+
+        document.getElementById("prevButton").addEventListener("click", () => {
+          if (currentPage > 1) {
+            currentPage--;
+            fetchData(currentPage);
+          }
         });
 
+        document.getElementById("nextButton").addEventListener("click", () => {
+          const startIndex = (currentPage - 1) * itemsPerPage;
+          const endIndex = startIndex + itemsPerPage;
+          if (endIndex < totalData.length) {
+            currentPage++;
+            fetchData(currentPage);
+          } else if (startIndex < totalData.length) {
+            currentPage++;
+            fetchData(currentPage);
+          }
+        });
 
-const data = await response.json();
-console.log("gdweugfew",data);
-                                                            if (data.data && data.data.length > 0) {
-                                                                totalData = data.data; // Store all data
-                                                                tableBody.innerHTML = ''; // Clear the table body
+        pageSelect.addEventListener("change", () => {
+          currentPage = parseInt(pageSelect.value);
+          fetchData(currentPage);
+        });
 
-                                                                const startIndex = (currentPage - 1) * itemsPerPage;
-                                                                const endIndex = startIndex + itemsPerPage;
-                                                                const itemsToDisplay = totalData.slice(startIndex, endIndex);
+        // async function applyFilter() {
+        //     const statusFilter = document.getElementById('statusFilter').value;
+        //     const GroupFilter = document.getElementById('GroupFilter').value;
+        //     currentPage = 1;
+        //     await fetchData(currentPage, statusFilter, GroupFilter);
+        // }
 
-                                                                itemsToDisplay.forEach((item, index) => {
-                                                                    const row = tableBody.insertRow();
-                                                                    const idCell = row.insertCell(0);
-                                                                    const nameCell = row.insertCell(1);
-                                                                    const statusCell = row.insertCell(2);
-                                                                    const bodyTextCell = row.insertCell(3);
-                                                                    const language=row.insertCell(4);
-                                                                    const Group = row.insertCell(5)
+        async function applyFilter() {
+          const statusFilter = document.getElementById("statusFilter").value;
+          const GroupFilter = document.getElementById("GroupFilter").value;
+          const languageFilter =
+            document.getElementById("languageFilter").value; // Get language filter value
+          currentPage = 1;
+          console.log(
+            "hhhh",
+            currentPage,
+            statusFilter,
+            GroupFilter,
+            languageFilter
+          );
+          await fetchData(
+            currentPage,
+            statusFilter,
+            GroupFilter,
+            languageFilter
+          ); // Pass language filter value to fetchData
+        }
+        fetchData(currentPage);
 
-                                                                    idCell.textContent = startIndex + index + 1; // Calculate the ID
-                                                                    nameCell.textContent = item.name || 'N/A';
-                                                                    statusCell.textContent = item.status || 'N/A';
-                                                                    Group.textContent=item.Group || 'N/A';
-                                                                    language.textContent=item.language || 'N/A';
-                                                                    // Find the 'BODY' component in the 'components' array
-                                                                    const bodyComponent = item.components.find(component => component.type === 'BODY');
-                                                                    if (bodyComponent) {
-                                                                        bodyTextCell.textContent = bodyComponent.text || 'N/A';
-                                                                    } else {
-                                                                        bodyTextCell.textContent = 'N/A';
-                                                                    }
-                                                                });
+        // Apply CSS styles to the body tag
+        document.body.style.backgroundColor = "#f2f2f2"; // Example style
+        document.body.style.fontFamily = "Arial, sans-serif"; // Example style
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container-scroller">
+      <%- include('partials/navbar.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('partials/sidebar.ejs') %>
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">
+                <span
+                  class="page-title-icon bg-gradient-primary text-white me-2"
+                >
+                  <i class="mdi mdi-home"></i>
+                </span>
+                All Templates
+              </h3>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <label for="filterType">Select Filter Type</label>
+                    <div>
+                      <select id="statusFilter">
+                        <option value="">Select Status</option>
+                        <option value="APPROVED">Approved</option>
+                        <option value="REJECTED">Rejected</option>
+                        <option value="PENDING">Pending</option>
+                        <!-- Add more options as needed -->
+                      </select>
+                      <select id="GroupFilter">
+                        <option value="">Select Group</option>
+                        <option value="UTILITY">Utility</option>
+                        <option value="MARKETING">Marketing</option>
+                        <option value="AUTHENTICATION">Authentication</option>
+                      </select>
 
-                                                                // Update page info
-                                                                const pageInfo = document.getElementById('pageInfo');
-                                                                pageInfo.textContent = `Page ${currentPage}`;
+                      <select id="languageFilter">
+                        <option value="">Select Language</option>
+                        <% Object.keys(languages).forEach(function(key) { %>
+                        <option value="<%= languages[key] %>">
+                          <%= key %>
+                        </option>
+                        <% }); %>
+                      </select>
 
-                                                                // Populate the select box with page numbers
-                                                                populatePageSelect();
-
-                                                            } else {
-                                                                console.error('No data found.');
-                                                            }
-                                                        } catch (error) {
-                                                            console.error('Error fetching data:', error);
-                                                        }
-                                                    }
-
-                                                    // Function to populate the select box with page numbers
-                                                    function populatePageSelect() {
-                                                        const pageCount = Math.ceil(totalData.length / itemsPerPage);
-                                                        pageSelect.innerHTML = '';
-                                                        for (let i = 1; i <= pageCount; i++) {
-                                                            const option = document.createElement('option');
-                                                            option.value = i;
-                                                            option.textContent = `Page ${i}`;
-                                                            pageSelect.appendChild(option);
-                                                        }
-                                                        pageSelect.value = currentPage;
-                                                    }
-
-                                                    // Event listener for previous button
-                                                    document.getElementById('prevButton').addEventListener('click', () => {
-                                                        if (currentPage > 1) {
-                                                            currentPage--;
-                                                            fetchData(currentPage);
-                                                        }
-                                                    });
-
-                                                    // Event listener for next button
-                                                    document.getElementById('nextButton').addEventListener('click', () => {
-                                                        const startIndex = (currentPage - 1) * itemsPerPage;
-                                                        if (startIndex + itemsPerPage < totalData.length) {
-                                                            currentPage++;
-                                                            fetchData(currentPage);
-                                                        }
-                                                    });
-
-                                                    // Event listener for page select
-                                                    pageSelect.addEventListener('change', () => {
-                                                        currentPage = parseInt(pageSelect.value);
-                                                        fetchData(currentPage);
-                                                    });
-
-                                                    // Initial data load
-                                                    fetchData(currentPage);
-
-//                                                     function applyFilter() {
-//     const statusSearchText = document.getElementById('statusFilter').value
-//     // const languageSearchText =  document.getElementById('languageFilter').value
-//     // const GroupSearchText = document.getElementById('GroupFilter').value  ;
-// // console.log(statusSearchText,languageSearchText,GroupSearchText);
-//     // fetchDataByFilter(filterType);
-// }
-// Implement the applyFilter function to update the statusFilter value and fetch data
-function applyFilter() {
-    const statusSearchText = document.getElementById('statusFilter').value;
-        const GroupSearchText = document.getElementById('GroupFilter').value;
-    // const languageSearchText =  document.getElementById('languageFilter').value
-    // const GroupSearchText = document.getElementById('GroupFilter').value  ;
-    // console.log(statusSearchText,languageSearchText,GroupSearchText);
-    currentPage = 1; // Reset current page to 1 when applying filter
-    fetchData(currentPage, statusSearchText,GroupSearchText);
-
-    }
-                                                </script>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <%- include('partials/footer.ejs') %>
-                        </div>
+                      <div class="col-md-3">
+                        <button
+                          class="btn btn-primary mt-4"
+                          onclick="applyFilter()"
+                        >
+                          Apply Filter
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
+            </div>
+            <div class="row" id="templateContainer">
+              <!-- Template cards will be inserted here -->
+            </div>
+            <div class="selectPageOptionAndPaging">
+              <select id="pageSelect"></select>
+            </div>
+            <div class="pagination-container" id="pagination">
+              <button class="button-12" id="prevButton">Previous</button>
+              <span id="pageInfo">Page 1</span>
+              <button class="button-12" id="nextButton">Next</button>
+            </div>
+          </div>
+          <%- include('partials/footer.ejs') %>
         </div>
+      </div>
+    </div>
 
-    </body>
     <%- include('partials/scripts.ejs') %>
+  </body>
+  <script>
+    const apiUrl = `https://graph.facebook.com/v19.0/104022815935352/message_templates`;
+    const itemsPerPage = 10; // Display 10 items per page
+    let currentPage = 1;
+    let totalData = [];
+    const templateContainer = document.getElementById("templateContainer");
+    const pageSelect = document.getElementById("pageSelect");
 
-        </html>
+    // async function fetchData(page, statusFilter, GroupFilter) {
+    //     try {
+    //         let status = '';
+    //         switch (statusFilter) {
+    //             case 'APPROVED':
+    //                 status = 'APPROVED';
+    //                 break;
+    //             case 'REJECTED':
+    //                 status = 'REJECTED';
+    //                 break;
+    //             case 'PENDING':
+    //                 status = 'PENDING';
+    //                 break;
+    //             default:
+    //                 status = '';
+    //                 break;
+    //         }
+
+    //         let category = '';
+    //         switch (GroupFilter) {
+    //             case 'UTILITY':
+    //                 category = 'UTILITY';
+    //                 break;
+    //             case 'MARKETING':
+    //                 category = 'MARKETING';
+    //                 break;
+    //             case 'AUTHENTICATION':
+    //                 category = 'AUTHENTICATION';
+    //                 break;
+    //             default:
+    //                 category = '';
+    //                 break;
+    //         }
+
+    //         const response = await fetch(`${apiUrl}?status=${status}&category=${category}&page=${page}&limit=${itemsPerPage}`, {
+    //             headers: {
+    //                 Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+    //                 "Content-Type": "application/json",
+    //             }
+    //         });
+    //         const data = await response.json();
+    //         if (data.data && data.data.length > 0) {
+    //             totalData = data.data;
+    //             templateContainer.innerHTML = '';
+    //             totalData.forEach((item, index) => {
+    //                 const card = document.createElement('div');
+    //                 card.classList.add('col-lg-4', 'grid-margin', 'stretch-card');
+    //                 card.innerHTML = `
+    //                     <div class="card">
+    //                         <div class="card-body">
+    //                             <h5 class="card-title">${item.name || 'N/A'}</h5>
+    //                             <p class="card-text"><strong>Status:</strong> ${item.status || 'N/A'}</p>
+    //                             <p class="card-text"><strong>Group:</strong> ${item.category || 'N/A'}</p>
+    //                             <p class="card-text"><strong>Component Body Text:</strong> ${getBodyText(item) || 'N/A'}</p>
+    //                             <p class="card-text"><strong>Language:</strong> ${item.language || 'N/A'}</p>
+    //                         </div>
+    //                     </div>
+    //                 `;
+    //                 templateContainer.appendChild(card);
+    //             });
+    //             populatePageSelect();
+    //         } else {
+    //             console.error('No data found.');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching data:', error);
+    //     }
+    // }
+
+    async function fetchData(
+      page,
+      statusFilter = "APPROVED",
+      GroupFilter = "",
+      language = "en"
+    ) {
+      console.log(page, statusFilter, GroupFilter, language);
+      try {
+        let status = statusFilter === "ALL" ? "" : statusFilter;
+
+        let category = "";
+        switch (GroupFilter) {
+          case "UTILITY":
+            category = "UTILITY";
+            break;
+          case "MARKETING":
+            category = "MARKETING";
+            break;
+          case "AUTHENTICATION":
+            category = "AUTHENTICATION";
+            break;
+          default:
+            category = "";
+            break;
+        }
+
+        const response = await fetch(
+          `${apiUrl}?status=${status}&category=${category}&page=${page}&limit=${itemsPerPage}&language=${language}`,
+          {
+            headers: {
+              Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        if (data.data && data.data.length > 0) {
+          totalData = data.data;
+          templateContainer.innerHTML = "";
+          totalData.forEach((item, index) => {
+            const card = document.createElement("div");
+            card.classList.add("col-lg-4", "grid-margin", "stretch-card", "gm");
+            card.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${item.name || "N/A"}</h5>
+                            <p class="card-text"><strong>Status:</strong> ${
+                              item.status || "N/A"
+                            }</p>
+                            <p class="card-text"><strong>Group:</strong> ${
+                              item.category || "N/A"
+                            }</p>
+                            <p class="card-text"><strong>Component Body Text:</strong> ${
+                              getBodyText(item) || "N/A"
+                            }</p>
+                            <p class="card-text"><strong>Language:</strong> ${
+                              item.language || "N/A"
+                            }</p>
+                        </div>
+                    </div>
+                `;
+            templateContainer.appendChild(card);
+          });
+          populatePageSelect();
+        } else {
+          console.error("No data found.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    function getBodyText(item) {
+      const bodyComponent = item.components.find(
+        (component) => component.type === "BODY"
+      );
+      return bodyComponent ? bodyComponent.text : null;
+    }
+
+    function populatePageSelect() {
+      const pageCount = Math.ceil(totalData.length / itemsPerPage);
+      pageSelect.innerHTML = "";
+      for (let i = 1; i <= pageCount; i++) {
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = `Page ${i}`;
+        pageSelect.appendChild(option);
+      }
+      pageSelect.value = currentPage;
+    }
+
+    document.getElementById("prevButton").addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        fetchData(currentPage);
+      }
+    });
+
+    document.getElementById("nextButton").addEventListener("click", () => {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      if (endIndex < totalData.length) {
+        currentPage++;
+        fetchData(currentPage);
+      } else if (startIndex < totalData.length) {
+        currentPage++;
+        fetchData(currentPage);
+      }
+    });
+
+    pageSelect.addEventListener("change", () => {
+      currentPage = parseInt(pageSelect.value);
+      fetchData(currentPage);
+    });
+
+    // async function applyFilter() {
+    //     const statusFilter = document.getElementById('statusFilter').value;
+    //     const GroupFilter = document.getElementById('GroupFilter').value;
+    //     currentPage = 1;
+    //     await fetchData(currentPage, statusFilter, GroupFilter);
+    // }
+
+    async function applyFilter() {
+      const statusFilter = document.getElementById("statusFilter").value;
+      const GroupFilter = document.getElementById("GroupFilter").value;
+      const languageFilter = document.getElementById("languageFilter").value; // Get language filter value
+      currentPage = 1;
+      console.log(
+        "hhhh",
+        currentPage,
+        statusFilter,
+        GroupFilter,
+        languageFilter
+      );
+      await fetchData(currentPage, statusFilter, GroupFilter, languageFilter); // Pass language filter value to fetchData
+    }
+    fetchData(currentPage);
+
+    // Apply CSS styles to the body tag
+    document.body.style.backgroundColor = "#f2f2f2"; // Example style
+    document.body.style.fontFamily = "Arial, sans-serif"; // Example style
+  </script>
+</html>

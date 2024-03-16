@@ -12,6 +12,9 @@ const ExcelJS = require("exceljs"); // Import the exceljs library
 const { ObjectId } = require("mongodb");
 const bodyParser = require("body-parser"); // Make sure to include body-parser
 router.use(bodyParser.json());
+// const languages = require('..');
+
+const languages = require('../views/data/languages.json');
 router.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 const {
@@ -23,6 +26,7 @@ const {
   GroupManage,
   campaignsSchema,
   campaignHistory,
+  Subscription,
 } = require("../model/schema");
 
 //Role
@@ -117,6 +121,32 @@ router.get("/update/:id", auth, async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
+// Example Express route for deleting a campaign
+router.delete('/deleteCampaign/:id', async (req, res) => {
+  try {
+    console.log("fjeowjfo");
+    const campaignId = req.params.id;
+    console.log("fjewjfew", req.params);
+    // Use Mongoose to delete the campaign from the database
+    const deletedCampaign = await campaignsSchema.findByIdAndDelete(campaignId);
+
+    if (!deletedCampaign) {
+      // If the campaign with the given ID is not found
+      return res.status(404).send('Campaign not found');
+    }
+
+    // If the campaign is successfully deleted
+    res.status(200).send('Campaign deleted successfully');
+  } catch (error) {
+    console.error('Error deleting campaign:', error);
+    res.status(500).send('Failed to delete campaign');
+  }
+});
+
+
+
 
 router.post("/update/:id", async (req, res) => {
   try {
@@ -349,8 +379,8 @@ router.get("/campaigns", auth, async (req, res) => {
   try {
     const campaignhistory = await campaignHistory.find({});
     const campaigns = await campaignsSchema.find({});
-
-    res.render("campaigns", { campaigns, campaignhistory });
+    const showingcampaignHistory = await campaignHistory.find({});
+    res.render("campaigns", { campaigns, campaignhistory, showingcampaignHistory });
   } catch (error) {
     console.log(error);
   }
@@ -1048,7 +1078,8 @@ router.get("/usersDetails/:userId", async (req, res) => {
 //Templates
 router.get("/viewAllTemplates", auth, (req, res) => {
   try {
-    res.render("viewAllTemplates");
+    res.render('viewAllTemplates', { languages: languages });
+
   } catch (error) {
     res.status(500).send("internal server Error");
   }
@@ -1483,6 +1514,78 @@ router.post('/sendtemplateMessages', upload.single('extractExcel'), auth, async 
   }
 });
 
+
+// CRUD Operations
+
+// Create a new subscription
+router.post('/subscriptions', async (req, res) => {
+  try {
+    const { name, description, price, duration } = req.body;
+    const newSubscription = new Subscription({ name, description, price, duration });
+    await newSubscription.save();
+    res.status(201).send(newSubscription);
+  } catch (error) {
+    console.error('Error creating subscription:', error);
+    res.status(500).send('Failed to create subscription');
+  }
+});
+
+
+
+
+router.get("/campaignHistory", auth, async (req, res) => {
+  try {
+    const campaignhistory = await campaignHistory.find({});
+    console.log(campaignhistory);
+    res.render("campaignHistory", { campaignhistory });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+
+// Read all subscriptions
+router.get('/subscriptions', async (req, res) => {
+  try {
+    const subscriptions = await Subscription.find();
+
+    res.render("Subscriptions", { subscriptions });
+  } catch (error) {
+    console.error('Error fetching subscriptions:', error);
+    res.status(500).send('Failed to fetch subscriptions');
+  }
+});
+
+// Update a subscription by ID
+router.put('/subscriptions/:id', async (req, res) => {
+  try {
+    const { name, description, price, duration } = req.body;
+    const updatedSubscription = await Subscription.findByIdAndUpdate(
+      req.params.id,
+      { name, description, price, duration },
+      { new: true }
+    );
+    res.status(200).send(updatedSubscription);
+  } catch (error) {
+    console.error('Error updating subscription:', error);
+    res.status(500).send('Failed to update subscription');
+  }
+});
+
+// Delete a subscription by ID
+router.delete('/subscriptions/:id', async (req, res) => {
+  try {
+    const deletedSubscription = await Subscription.findByIdAndDelete(req.params.id);
+    if (!deletedSubscription) {
+      return res.status(404).send('Subscription not found');
+    }
+    res.status(200).send('Subscription deleted successfully');
+  } catch (error) {
+    console.error('Error deleting subscription:', error);
+    res.status(500).send('Failed to delete subscription');
+  }
+});
 
 // router.get("/templateMsgHistory", auth, async (req, res) => {
 //   const ITEMS_PER_PAGE = 5; // Number of items to display per page

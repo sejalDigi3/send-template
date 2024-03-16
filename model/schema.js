@@ -224,8 +224,15 @@ const contactNumbersSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // collecthistory of Campaign
+const subscriptionSchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  price: Number,
+  duration: String,
+});
 
-
+// Subscription Model
+const Subscription = mongoose.model('Subscription', subscriptionSchema);
 const templateMsg = new mongoose.model('templateMsg', templateSchema);
 const alluserOfourPanel = new mongoose.model('alluserOfourPanel', usersSchema);
 const customMessageContent = new mongoose.model('customMessage', customMsgSchema)
@@ -244,5 +251,6 @@ module.exports = {
   GroupManage,
   campaignsSchema,
   campaignHistory,
-  User
+  User,
+  Subscription
 };

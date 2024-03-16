@@ -1,211 +1,309 @@
-
 <%- include('partials/head.ejs') %>
-
+       <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <body>
 <style>
-  .parentContainerOfAllBoxes{
+  .parentContainerOfAllBoxes {
     display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
+  .card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    margin-bottom: 20px;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  .card-body {
+    padding: 20px;
+  }
+  .card-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  .card-text {
+    font-size: 16px;
+    color: #555;
+  }
+  .card-img-absolute {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    opacity: 0.2;
+  }
+  .business-details {
+    margin-top: 30px;
+  }
+  .business-details .card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    margin-bottom: 20px;
+  }
+  .business-details .card:hover {
+    transform: translateY(-5px);
+  }
+  .business-details .card-body {
+    padding: 20px;
+  }
+  .business-details .card-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  .business-details .card-text {
+    font-size: 16px;
+    color: #555;
+  }
+  .business-details .card-img-absolute {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    opacity: 0.2;
+  }
+  .business-details h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  .business-details table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .business-details th,
+  .business-details td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  .business-details th {
+    background-color: #f2f2f2;
+  }
+  .counter{
+    color: #222;
+    font-family: 'Rubik', sans-serif;
+    text-align: center;
+    width: 210px;
+    height: 210px;
+    padding: 20px;   
+    margin: 0 auto;
+    border-radius: 100px;
+    position: relative;
+    z-index: 1;
+}
+.counter:before,
+.counter:after{
+    content: '';
+    background: linear-gradient(to right, #3da2f4, #1a57f2);
+    height: 50%;
+    width: 95%;
+    border-radius: 120px 120px 0 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+}
+.counter:after{
+    border-radius: 0 0 120px 120px;
+    top: auto;
+    bottom: 0;
+    left: auto;
+    right: 0;
+}
+.counter .counter-content{
+    background-color: #fff;
+    height: 100%;
+    padding: 30px 12px;
+    border-radius: 50%;
+    box-shadow: 5px 5px rgba(0,0,0,0.1);
+}
+.counter .counter-icon{
+    color: #d1d1d1;
+    font-size: 35px;
+    line-height: 35px;
+    margin: 0 0 13px;
+}
+.counter .counter-value{
+    color: #1a57f2;
+    font-size: 30px;
+    font-weight: 600;
+    display: block;
+}
+.counter h3{
+    color: #555;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: capitalize;
+    margin: 0 0 8px;
+}
+.counter.orange:before,
+.counter.orange:after{
+    background: linear-gradient(to right, #EB9421, #EF6024);
+}
+.counter.orange .counter-value{ color: #EF6024; }
+.counter.purple:before,
+.counter.purple:after{
+    background: linear-gradient(to right, #8475B6, #483F90);
+}
+.counter.purple .counter-value{ color: #483F90; }
+.counter.green:before,
+.counter.green:after{
+    background: linear-gradient(to right, #ADCE37, #61BC47);
+}
+.counter.green .counter-value{ color: #61BC47; }
+@media screen and (max-width:990px){
+    .counter{ margin-bottom: 40px; }
+}
 </style>
-    <div class="container-scroller">
-        <%- include('partials/navbar.ejs') %>
-            <div class="container-fluid page-body-wrapper">
-                <%- include('partials/sidebar.ejs') %>
-                <div class="main-panel">
-                    <div class="content-wrapper">
-                      <div class="page-header">
-                        <h3 class="page-title">
-                          <span class="page-title-icon bg-gradient-primary text-white me-2">
-                            <i class="mdi mdi-home"></i>
-                            <!-- <img src="/static/assets/images/home-gradient.png" alt="" style="width: 35px;"> -->
-                          </span> dashboard
-                        </h3>
-                      </div>
-                      <div class="parentContainerOfAllBoxes">
-
-
-                      <!-- add custom code here -->
-                      <!-- template message cart -->
-                      <div class="col-md-4 stretch-card grid-margin">
-                        <div class="card bg-gradient-info card-img-holder text-white">
-                          <div class="card-body">
-                            <img src="/static/assets/images/circle.svg" class="card-img-absolute" alt="circle-image" style="    position: absolute;
-                            top: 0;
-                            right: 0;
-                            height: 100%;">
-                            <h4 class="font-weight-normal mb-3">Template Messages<i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
-                            </h4>
-
-                              <h1 id="templateMSGCount" class="mb-5"> <%= countDetails %></h1>
-
-                            <h6 class="card-text">Total <%= countDetails %> Template Messages Has Been Sent by this Account</h6>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- custom messag cart -->
-                      <div class="col-md-4 stretch-card grid-margin">
-                        <div class="card bg-gradient-danger card-img-holder text-white">
-                          <div class="card-body">
-                            <img src="/static/assets/images/circle.svg" class="card-img-absolute" alt="circle-image" style="    position: absolute;
-                            top: 0;
-                            right: 0;
-                            height: 100%;">
-                            <h4 class="font-weight-normal mb-3">Custom Message <i class="mdi mdi-chart-line mdi-24px float-right"></i>
-                            </h4>
-                            <h2 class="mb-5" style="color: #374e60;"> <%=  %></h2>
-                            <h6 class="card-text">Total  <%=  %> Custom Messages Has Been Sent by this Account</h6>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Campaign cart  -->
-                      <div class="col-md-4 stretch-card grid-margin">
-                        <div class="card bg-gradient-success card-img-holder text-white">
-                          <div class="card-body">
-                            <img src="/static/assets/images/circle.svg" class="card-img-absolute" alt="circle-image" style="position: absolute;
-                            top: 0;
-                            right: 0;
-                            height: 100%;">
-
-                            <img src="/static/assets/images/campaign.png" alt="" style="width: 27px; float: right;">
-                            <h4 class="font-weight-normal mb-3">Campaigns
-                            </h4>
-                            <h2 class="mb-5" style="color: #374e60;"> <%=  %></h2>
-                            <h6 class="card-text">Total <%=  %> Campaigns Sent by this Account</h6>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-                  <div class="card-body">
-                                        <h2>Business Details</h2>
-                                        <table class="table" id="data-table">
-                                            <thead>
-                                                <tr>
-                                                    <!-- <th>Field</th> -->
-                                                    <!-- <th>Value</th> -->
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                        </table>
-                    </div>
-                   <%- include('partials/footer.ejs') %>
+<div class="container-scroller">
+    <%- include('partials/navbar.ejs') %>
+        <div class="container-fluid page-body-wrapper">
+            <%- include('partials/sidebar.ejs') %>
+            <div class="main-panel">
+                <div class="content-wrapper">
+                  <div class="page-header">
+                    <h3 class="page-title">
+                      <span class="page-title-icon bg-gradient-primary text-white me-2">
+                        <i class="mdi mdi-home"></i>
+                      </span> dashboard
+                    </h3>
                   </div>
+                  <div class="parentContainerOfAllBoxes">
+    <div class="col-md-4">
+                      <div class="card bg-gradient-success card-img-holder text-white" style="background: linear-gradient(90deg, rgb(214 212 255 / 89%) 3%, rgb(216 216 243 / 0%) 100%) !important;">
+                        <div class="card-body">
+                          <img src="/static/assets/images/circle.svg" class="card-img-absolute" alt="circle-image">
+                          <img src="/static/assets/images/template.png" alt="" style="width: 27px; float: right;">
+                          <h4 class="card-title">Template</h4>
+                          <h1 class="card-text" style="color: #374e60;"><div class="counter-content">
+                    <span class="counter-value"><%= countDetails %></span>
+                </div></h1>
+                        </div>
+                      </div>
+                    </div>
+
+
+                        <div class="col-md-4">
+                      <div class="card bg-gradient-success card-img-holder text-white" style="background: linear-gradient(90deg, rgb(214 212 255 / 89%) 3%, rgb(216 216 243 / 0%) 100%) !important;">
+                        <div class="card-body">
+                          <img src="/static/assets/images/circle.svg" class="card-img-absolute" alt="circle-image">
+                          <img src="/static/assets/images/campaign.png" alt="" style="width: 27px; float: right;">
+                          <h4 class="card-title">Campaigns</h4>
+                          <h1 class="card-text" style="color: #374e60;"><div class="counter-content">
+                    <span class="counter-value"><%= countDetails %></span>
+                </div></h1>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                    <!-- Campaign card  -->
+                    <div class="col-md-4">
+                      <div class="card bg-gradient-success card-img-holder text-white" style="background: linear-gradient(90deg, rgb(214 212 255 / 89%) 3%, rgb(216 216 243 / 0%) 100%) !important;">
+                        <div class="card-body">
+                          <img src="/static/assets/images/circle.svg" class="card-img-absolute" alt="circle-image">
+                          <img src="/static/assets/images/chat.png" alt="" style="width: 27px; float: right;">
+                          <h4 class="card-title">Custom Message</h4>
+                          <h1 class="card-text" style="color: #374e60;"><div class="counter-content">
+                    <span class="counter-value"><%= countDetails %></span>
+                </div></h1>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="business-details">
+                    <div class="card">
+                      <div class="card-body">
+                        <h2>Business Details</h2>
+                        <table class="table" id="data-table">
+                            <thead>
+                                <tr >
+                                    <th   style="background: linear-gradient(90deg, rgb(214 212 255 / 89%) 3%, rgb(130 130 253 / 32%) 100%) !important">Field</th>
+                                    <th  style="background: linear-gradient(90deg, rgb(214 212 255 / 89%) 3%, rgb(130 130 253 / 32%) 100%) !important"  id="valueName">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <%- include('partials/footer.ejs') %>
+                </div>
             </div>
+        </div>
     </div>
+    <!-- JavaScript to dynamically fetch and populate business information -->
+    <script>
+        window.history.pushState(null, null, window.location.href);
+        window.onpopstate = function () {
+            window.history.pushState(null, null, window.location.href);
+        };
 
-      <script>
-           window.history.pushState(null, null, window.location.href);
-      window.onpopstate = function () {
-          window.history.pushState(null, null, window.location.href);
-      };
+        // JavaScript code for fetching and populating business information dynamically
+        const GRAPH_API_URL = 'https://graph.facebook.com/v17.0/116168451372633?fields=verified_name,code_verification_status,display_phone_number,quality_rating,id';
+
+        const tableBody = document.querySelector('#data-table tbody');
+        const fieldName = document.getElementById('fieldName');
+        const valueName = document.getElementById('valueName');
+
+        fetch(GRAPH_API_URL,{
+            headers: {
+                Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
+                "Content-Type": "application/json",
+              }
+        })
+            .then(response => response.json())
+            .then(data => {
+                const fieldsToShow = [
+                    'verified_name',
+                    'code_verification_status',
+                    'display_phone_number',
+                    'quality_rating',
+                    'id'
+                ];
+
+                fieldsToShow.forEach(fieldName => {
+                    const row = document.createElement('tr');
+                    const fieldCell = document.createElement('td');
+                    fieldCell.textContent = fieldName.charAt(0).toUpperCase() + fieldName.slice(1).replace(/_/g, ' ');
+                    const valueCell = document.createElement('td');
+                    valueCell.textContent = data[fieldName] || 'N/A';
+
+                    row.appendChild(fieldCell);
+                    row.appendChild(valueCell);
+                    tableBody.appendChild(row);
+                });
 
 
-     const GRAPH_API_URL = 'https://graph.facebook.com/v17.0/116168451372633?fields=verified_name,code_verification_status,display_phone_number,quality_rating,id';
 
-const tableBody = document.querySelector('#data-table tbody');
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
 
-fetch(GRAPH_API_URL,{
-    headers: {
-        Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
-        "Content-Type": "application/json",
-      }
-})
-    .then(response => response.json())
-    .then(data => {
-        const fieldsToShow = [
-            'verified_name',
-            'code_verification_status',
-            'display_phone_number',
-            'quality_rating',
-            'id'
-        ];
 
-        fieldsToShow.forEach(fieldName => {
-            const row = document.createElement('tr');
-            const fieldCell = document.createElement('td');
-            fieldCell.textContent = fieldName;
-            const valueCell = document.createElement('td');
-            valueCell.textContent = data[fieldName] || 'N/A';
 
-            row.appendChild(fieldCell);
-            row.appendChild(valueCell);
-            tableBody.appendChild(row);
+$(document).ready(function(){
+    $('.counter-value').each(function(){
+        $(this).prop('Counter',0).animate({
+            Counter: $(this).text()
+        },{
+            duration: 3500,
+            easing: 'swing',
+            step: function (now){
+                $(this).text(Math.ceil(now));
+            }
         });
-    })
-    .catch(error => {
-        console.error('Error fetching data:', error);
     });
-
-const subscribedAppsTableBody = document.querySelector('#subscribed-apps-table tbody');
-fetch('https://graph.facebook.com/v19.0/104022815935352/subscribed_apps', {
-    headers: {
-        Authorization: `Bearer EAAWqeZCMrJ6sBO0X7XRm9sUzT9VDnllTw54ul2YUHhh5UW8IdzCWZAQLSsNomFx6cBQJbWt7Kzsad6MnAE8Ge64EnMRALBpirjamhEXC56gxj4eZBrCV2BQoNZAkb2ZCPs8ZCEm5iq5DFvVFOhRgVo9NCx7z9TuogsSliZBv4wqrvQdm14DnzI8HyZAUkmT5yJYzwJgMwEWPcKRvA7DF`,
-        "Content-Type": "application/json",
-    }
-})
-.then(response => response.json())
-.then(data => {
-  console.log(data,"ddddddddddddd");
-    data.data.forEach(app => {
-        const row = document.createElement('tr');
-        const nameCell = document.createElement('td');
-        nameCell.textContent = app.whatsapp_business_api_data.name || 'N/A';
-        const linkCell = document.createElement('td');
-        const link = document.createElement('a');
-        link.href = app.whatsapp_business_api_data.link;
-        link.target = '_blank';
-        link.textContent = app.whatsapp_business_api_data.link;
-        linkCell.appendChild(link);
-
-        row.appendChild(nameCell);
-        row.appendChild(linkCell);
-        subscribedAppsTableBody.appendChild(row);
-    });
-})
-.catch(error => {
-    console.error('Error fetching subscribed apps data:', error);
 });
-
-// JavaScript to fetch and populate owned WhatsApp business accounts data
-const ownedWhatsAppAccountsTableBody = document.querySelector('#owned-whatsapp-accounts-table tbody');
-
-fetch('https://graph.facebook.com/v19.0/1285081532254870/owned_whatsapp_business_accounts', {
-    headers: {
-        Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
-
-        "Content-Type": "application/json",
-    }
-})
-.then(response => response.json())
-.then(data => {
-    data.data.forEach(account => {
-        const row = document.createElement('tr');
-        const businessIdCell = document.createElement('td');
-        businessIdCell.textContent = account.id || 'N/A';
-        const businessNameCell = document.createElement('td');
-        businessNameCell.textContent = account.name || 'N/A';
-        const messageTemplateNamespaceCell = document.createElement('td');
-        messageTemplateNamespaceCell.textContent = account.message_template_namespace || 'N/A';
-
-        row.appendChild(businessIdCell);
-        row.appendChild(businessNameCell);
-        row.appendChild(messageTemplateNamespaceCell);
-        ownedWhatsAppAccountsTableBody.appendChild(row);
-    });
-})
-.catch(error => {
-    console.error('Error fetching owned WhatsApp business accounts data:', error);
-});
-
-
-
-
-
-
     </script>
-</body>
 
-<%- include('partials/scripts.ejs') %>
+    <%- include('partials/scripts.ejs') %>
+</body>
 </html>
