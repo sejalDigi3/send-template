@@ -13,15 +13,6 @@
         justify-content: space-between;
         max-width: 480px;
       }
-
-      /* #toggelSelectGroup{
-         position: relative;
-        margin-top: 0px !important;
-        margin-bottom: 0px !important;
-        padding-left: 0 !important;
-
-      } */
-
       #uploadCsvForBulkMsg {
         display: block;
       }
@@ -36,14 +27,6 @@
                              padding-left: 2rem;
                              font-size: 1rem;
                            }
-
-
-
-
-
-
-
-      /* Additional styles for your form elements can be added here */
     </style>
 
     <div class="container-scroller">
@@ -79,20 +62,6 @@
                         <form id="campaignForm" onsubmit="return validateForm()" action="/SentMessagetothisCampaign" method="post" enctype="multipart/form-data">
 
                           <div class="CreatemodalForm">
-
-
-
-
-
-
-
-
-                          <!-- <div class="form-check sameInputHover" onclick="showCampaignDetailsContainer()">
-                              <input class="form-check-input" type="checkbox" style="margin-left: 21px;" value="" id="checkSElectGroup">
-                              <label class="form-check-label" style="margin-left: 48px;" for="checkSElectGroup">
-                                  Show Campaign Details
-                              </label>
-                          </div> -->
 
                             <div class="form-check sameInputHover" id="campaignDataContainer">
                               <h2>Campaign Details</h2>
@@ -169,12 +138,6 @@
         </div>
     </div>
 
-
-
-
-
-
-
     <script>
       document.getElementById('hideANdShowGroupSEction').style.display='none';
       document.getElementById('uploadCsvForBulkMsg').style.display = 'none';
@@ -206,21 +169,6 @@
         }
       }
 
-
-
-//  campaign div toggle
-      // document.getElementById('campaignDataContainer').style.display='none';
-      // showCampaignDetailsContainer=()=>{
-      //   if(document.getElementById('checkSElectGroup').checked){
-      //     document.getElementById('campaignDataContainer').style.display='block';
-      //   }else{
-      //     document.getElementById('campaignDataContainer').style.display='none';
-      //   }
-      // }
-
-
-
-
       function displayFileName() {
                     const fileInput = document.getElementById('excelFile');
                     const uploadedFileName = document.getElementById('uploadedFileName');
@@ -231,10 +179,7 @@
                       uploadedFileName.textContent = "";
                     }
                   }
-    </script>
 
-
-<script>
    function displayFileName() {
                     const fileInput = document.getElementById('excelFile');
                     const uploadedFileName = document.getElementById('uploadedFileName');
@@ -245,12 +190,7 @@
                       uploadedFileName.textContent = "";
                     }
                   }
-</script>
 
-
-
-
-<script>
    function validateForm() {
     var selectedRadio = document.querySelector('input[name="sameName"]:checked');
     if (!selectedRadio) {

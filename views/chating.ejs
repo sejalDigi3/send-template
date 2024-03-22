@@ -203,7 +203,7 @@ form{
                                         </span> Chat
                                     </h3>
                                 </div>
-                                
+
                                 <!-- chat code starts from here -->
                                 <form action="/getMsg" method="post">
                                 <div class="flexbox" >
@@ -219,13 +219,13 @@ form{
                                           </div>
 
 
-                                        
-                                          
-                                     
-                                          
-                                          
 
-                                          
+
+
+
+
+
+
 
 
                                           <% showourMessage.forEach((message, index) => { %>
@@ -233,26 +233,26 @@ form{
                                               <%= message.gettingMsg %>
                                             </div>
                                           <% }); %>
-                                          
 
-                                          
+
+
 
                                         </div>
                                       </div>
-                                      
+
                                       <div id="typing">
                                         <div><span></span> <span></span> <span></span> <span class="n">Someone</span> is typing...</div>
                                       </div>
                                       <div class="chat-box-footer">
-                                        
+
                                         <textarea id="chat_input" name="getTheData" placeholder="Enter your message here..."></textarea>
-                                    
+
                                         <button id="send" onclick="callthisFunc()">
                                           <svg style="width:24px;height:24px" viewBox="0 0 24 24">
                                             <path fill="#006ae3" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
                                           </svg>
                                         </button>
-                                        
+
                                       </div>
                                     </div>
                                   </div>
@@ -287,7 +287,6 @@ form{
             };
         </script> -->
     </body>
-
     <%- include('partials/scripts.ejs') %>
 
         </html>

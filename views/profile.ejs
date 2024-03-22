@@ -19,67 +19,8 @@
                                 </div>
                                 <!-- put here -->
                                 <div class="card">
-                                    <div class="card-body">
-<!--
-                                        <form action="/AdditionalDocuments" method="post">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control form-control-lg" id="exampleInputUsername1" name="GSTNumbers" value="" placeholder="Enter here GST Number">
-                                            </div>
-                                            <div class="mb-3" id="uploadCsvForBulkMsg" style="display: block;">
-                                                <label for="excelFile" class="label" id="showFileName">
-                                                  <i class="fa-solid fa-cloud-arrow-up"></i><br>Upload GST Certificate
-                                                </label>
-                                                <input class="form-control w-50" onchange="displayFileName()" name="extractExcel" id="excelFile" type="file" accept=".xlsx">
-                                              </div>
-                                            <button style="background: #242121;
-                                          color: white;
-                                          border-radius: 6px;
-                                          border: none;
-                                          padding: 8px;
-                                          width: 100%;">upload</button>
-                                    </form> -->
+                                    <div class="card-body"
 
-
-                                        <table class="table">
-                                            <tbody>
-                                                <h2>User Details</h2>
-
-
-                                                    <tr>
-                                                        <td>First Name</td>
-                                                        <td>:</td>
-                                                        <td>
-                                                            <%= user.fname %>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Last Name</td>
-                                                        <td>:</td>
-                                                        <td>
-                                                            <%= user.lname %>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Phone No</td>
-                                                        <td>:</td>
-                                                        <td>
-                                                            <%= user.phoneNum %>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Email</td>
-                                                        <td>:</td>
-                                                        <td>
-                                                            <%= user.userEmail %>
-                                                        </td>
-                                                    </tr>
-
-                                                    <!-- start from here -->
-
-
-                                                    <!-- start from here -->
-                                            </tbody>
-                                        </table>
                                         <a id="EditBtn" href="/update/<%= user._id %>">edit details</a>
                                     </div>
                                     <div class="card-body">

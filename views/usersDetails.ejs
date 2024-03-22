@@ -103,42 +103,5 @@
         <%- include('partials/scripts.ejs') %>
     </body>
 
-    <!-- <script>
-     const GRAPH_API_URL = 'https://graph.facebook.com/v17.0/104022815935352?fields=verified_name,code_verification_status,display_phone_number,quality_rating,id';
-
-const tableBody = document.querySelector('#data-table tbody');
-
-fetch(GRAPH_API_URL,{
-    headers: {
-        Authorization: `Bearer EAAWqeZCMrJ6sBO7zUipLVLmnOdyF0ZBPcMyJC17gRmcZAZAnn3mMbRkvb19SFMiwvZCaIhuZAeB1C0QCrgfJK193Hav9kIDsKM5ZCvFAVkjgAkb57BOj2DWULJmEDvdxjpp01hpsznvZA7ZBVaO22QQdFjmfa0bggPndsH81BegAEgD8hSak3Pz8woVvPwLOMKAOnNLVEiDggLACVbaru`,
-        "Content-Type": "application/json",
-      }
-})
-    .then(response => response.json())
-    .then(data => {
-        const fieldsToShow = [
-            'verified_name',
-            'code_verification_status',
-            'display_phone_number',
-            'quality_rating',
-            'id'
-        ];
-
-        fieldsToShow.forEach(fieldName => {
-            const row = document.createElement('tr');
-            const fieldCell = document.createElement('td');
-            fieldCell.textContent = fieldName;
-            const valueCell = document.createElement('td');
-            valueCell.textContent = data[fieldName] || 'N/A';
-
-            row.appendChild(fieldCell);
-            row.appendChild(valueCell);
-            tableBody.appendChild(row);
-        });
-    })
-    .catch(error => {
-        console.error('Error fetching data:', error);
-    });
-
-    </script> -->
+ 
     </html>

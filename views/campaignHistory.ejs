@@ -174,18 +174,11 @@
             $(this).parent().siblings('.truncated-message').show();
         });
     });
-</script>
-
-
-        <script>
             window.history.pushState(null, null, window.location.href);
             window.onpopstate = function () {
                 window.history.pushState(null, null, window.location.href);
             };
-        </script>
-
-
-        <script>
+    
             function displaySelectedFile() {
                 var fileInput = document.getElementById("excelFile");
                 var fileError = document.getElementById("showHereSelectedFile");

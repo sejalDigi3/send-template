@@ -1,5 +1,4 @@
 <%- include('partials/head.ejs') %>
-
   <body>
     <style>
       .selectGroupForm{
@@ -388,8 +387,6 @@
     </div>
 
     <script>
-
-      // Handle edit icon click for editing individual user name and mobile
       var editIcons = document.querySelectorAll('.edit-icon');
       var modal = document.getElementById('editModal');
       var roleEditForm = document.getElementById('roleEditForm');
@@ -500,10 +497,7 @@
         const editModal = document.getElementById('editModal').style.display = 'none';
         // document.getElementById('closeModal')
       }
-    </script>
-    <!-- ramji code -->
 
-    <script>
       function validateCheckboxSelection() {
         // Get all the checkbox elements by their name attribute
         const checkboxes = document.querySelectorAll('input[name="selectedUsers"]');
@@ -526,10 +520,6 @@
 
         return true; // Allow the form to submit
       }
-    </script>
-
-<!-- file input and brows file is here -->
-<script>
   function displayFileName() {
     const fileInput = document.getElementById('fileID');
     const uploadedFileName = document.getElementById('uploadedFileName');

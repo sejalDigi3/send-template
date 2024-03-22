@@ -28,7 +28,7 @@
       }
 
 
-  
+
       .table td {
                        max-width: 200px;
                        white-space: nowrap;
@@ -42,8 +42,8 @@
 #UniqueDesignForModal{
   width: 50%;
   margin: auto;
-  margin-top: 17%;                        
-  background: white;                                             
+  margin-top: 17%;
+  background: white;
 }
 
 
@@ -51,9 +51,6 @@
 /* loading animation */
 
     </style>
-
-    
-
     <div class="container-scroller">
       <%- include('partials/navbar.ejs') %>
         <div class="container-fluid page-body-wrapper">
@@ -68,11 +65,6 @@
                     </span> campaigns
                   </h3>
                 </div>
-
-
-
-
-
                 <div class="row" style="margin-top: 6px;">
                   <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
@@ -103,12 +95,6 @@
             </div>
         </div>
     </div>
-
-
-                
-   
-
-
     <script>
       function displaySelectedFile() {
         var fileInput = document.getElementById("excelFile");
@@ -121,23 +107,11 @@
           fileError.innerText = ""; // Clear the error message if no file is selected
         }
       }
-
-      // popmodal script start here
-
-    </script>
-
-
-<script>
   window.history.pushState(null, null, window.location.href);
   window.onpopstate = function () {
     window.history.pushState(null, null, window.location.href);
   };
 </script>
-
-
-
-
-
   </body>
 
   <%- include('partials/scripts.ejs') %>

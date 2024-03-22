@@ -5,19 +5,15 @@ require('dotenv').config();
 const port = process.env.PORT || 8888;
 const cookieParser = require('cookie-parser');
 const axios = require('axios');
-
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 const ejs = require('ejs');
 app.set('view engine', 'ejs');
-
 const multer = require('multer');
 const csvtojson = require('csvtojson');
 const xlsx = require("xlsx");
 const upload = multer({ dest: 'uploads/' });
-
 require('./database/conn');
 const {
   alluserOfourPanel,
@@ -28,23 +24,16 @@ const {
   GroupManage
 }
   = require('./model/schema');
-
-
-
 app.use('/css', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css')));
 app.use('/js', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'js')));
 app.use('/static', express.static(path.join(__dirname, '/public')));
 app.use(cookieParser());
 app.use("", require('./routes/routes'))
-
-
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
-
 const nodemailer = require('nodemailer');
-const uuid = require('uuid'); // Import the uuid library
+const uuid = require('uuid');
 
-// Create a Nodemailer transporter with your Gmail credentials
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -52,8 +41,6 @@ const transporter = nodemailer.createTransport({
     pass: 'ywfkswrvdawwxdoz',
   },
 });
-
-// this post request for register
 app.post('/Register', async (req, res) => {
   try {
     const { fname, lname, phoneNum, userEmail, userpassword, cpassword } = req.body;
@@ -141,9 +128,6 @@ app.get('/verify/:token', async (req, res) => {
     res.render('verificationSuccess');
   }
 });
-
-
-// this post request is for login
 app.post('/', async (req, res) => {
   try {
     const userEmail = req.body.userEmail;
@@ -190,7 +174,6 @@ app.post('/', async (req, res) => {
     res.render('login', { loginErrors });
   }
 });
-// this post request will save Template message in database
 app.post('/saveTemplateInDb', async (req, res) => {
   try {
     const { phoneOfTemp, selectTemp } = req.body
@@ -209,7 +192,6 @@ app.post('/saveTemplateInDb', async (req, res) => {
     if (error) throw error
   }
 });
-// this post request will save Custom message in database
 app.post('/saveCustomDb', async (req, res) => {
   try {
     const { mobileNumber, customMsgData } = req.body
@@ -228,11 +210,9 @@ app.post('/saveCustomDb', async (req, res) => {
     if (error) throw error
   }
 });
-// forgot password functionality start.................................
 app.get('/forgotPassword', (req, res) => {
   res.render('forgotPassword');
 });
-
 app.post('/forgot-password', async (req, res) => {
   try {
     const userEmail = req.body.userEmail;
@@ -300,42 +280,6 @@ app.get('/reset-password', async (req, res) => {
     res.status(500).send('Reset password page loading failed.');
   }
 });
-
-// app.post('/reset-password', async (req, res) => {
-//   try {
-//     const resetToken = req.body.resetToken;
-//     // const userEmailPass = req.body.userEmail;
-//     console.log(resetToken);
-//     console.log(req.body.newPassword);
-//     // console.log(`New Password: ${userEmailPass}`);
-//     // console.log('Reset Token:', resetToken);
-
-//     // const currentTime = Date.now();
-//     // console.log('Current Time:', currentTime);
-
-//     const userDetail = await alluserOfourPanel.findOne({ resetToken: resetToken });
-
-//     console.log('User Found in Database:', userDetail);
-
-//     if (!userFound) {
-//       console.error('Invalid or expired reset token.');
-//     }
-//     // res.send("verification successfully")
-//     // Set the new password and clear the reset token and expiration
-//     userDetail.userpassword = newPassword;
-//     userDetail.resetToken = null;
-//     // userFound.resetTokenExpiration = undefined;
-
-//     // Save the updated user document
-//     await userDetail.save();
-
-//     // Redirect to a login page or dashboard
-//     res.render('login');
-//   } catch (error) {
-//     console.error('Password reset failed:', error);
-//     res.status(500).send('Password reset failed.');
-//   }
-// });
 app.post('/reset-password', async (req, res) => {
   try {
     const resetToken = req.body.resetToken;
@@ -368,9 +312,6 @@ app.post('/reset-password', async (req, res) => {
     res.status(500).send('Password reset failed.');
   }
 });
-
-
-// CHATE HERE SECTION
 app.post('/getMsg', async (req, res) => {
   try {
     const phoneNo = 9157808228; // Replace with your phone number
@@ -411,8 +352,6 @@ app.post('/getMsg', async (req, res) => {
     res.send("Internal Server Error");
   }
 });
-
-// server.js
 app.post('/uploadingFile', upload.single('file'), async (req, res) => {
   try {
     // if (!req.file) {
@@ -463,8 +402,6 @@ app.post('/uploadingFile', upload.single('file'), async (req, res) => {
   }
 });
 
-
-// post request for Group management
 app.post('/GroupNameSaveIntoDb', async (req, res) => {
   try {
     const GroupNameInput = req.body.GroupName;
@@ -479,6 +416,7 @@ app.post('/GroupNameSaveIntoDb', async (req, res) => {
     console.log(error);
   }
 });
+
 app.listen(port, () => {
   console.log(`Server Running at http://localhost:${port}`);
 })
