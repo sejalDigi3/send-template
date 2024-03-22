@@ -112,8 +112,42 @@
                   </h3>
                 </div>
 
+<div id="addContactModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeAddContactModal()">&times;</span>
+    <h2>Add Contact</h2>
+    <form id="addContactForm">
+      <div class="form-group">
+        <input type="text" id="contactName" placeholder="Enter Name" required>
+      </div>
+      <div class="form-group">
+        <input type="tel" id="contactNumber" placeholder="Enter Phone Number" required>
+      </div>
+      <button type="submit">Add</button>
+    </form>
+  </div>
+</div>
+
+
+<div id="addContactModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeAddContactModal()">&times;</span>
+    <h2>Add Contact</h2>
+    <form id="addContactForm">
+      <div class="form-group">
+        <label for="contactName">Name:</label>
+        <input type="text" id="contactName" name="contactName" required>
+      </div>
+      <div class="form-group">
+        <label for="contactNumber">Contact Number:</label>
+        <input type="text" id="contactNumber" name="contactNumber" required>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>
                 <!-- add custom code here -->
-                <div class="uploadFile">
+                <!-- <div class="uploadFile">
                   <form action="/uploadingFile" method="post" style="width: 73%; display: flex;"
                     enctype="multipart/form-data" onsubmit="return validateForm()">
                     <div class="mb-3" style="width: 15rem;">
@@ -125,8 +159,7 @@
                     </div>
                     <div class="buttons" style="margin-left: -78px;
                     padding: 3px;">
-                      <!-- <button type="submit" class="button-12" id="uploadContactsButtons" style="background-color: white; color: black;margin-left: 19px;
-                    padding: -1px;">Upload</button> -->
+
                       <p style="text-align: center; background: red;color: white;width: 60%;margin: auto;   border-radius: 3px;"
                         id="cetegoryErrorMsg"></p>
 
@@ -136,9 +169,38 @@
                   </form>
                   <a href="/Group_management" id="GroupMNgBtn" class="button-12"
                     style="text-decoration: none; height: 30px; margin-top: 10px; background-color: white; color: black;">Group management</a>
+<button id="addContactButton">Add Contact</button>
+                </div> -->
 
-                </div>
 
+
+
+<div class="uploadFile">
+  <form action="/uploadingFile" method="post" style="width: 100%; display: flex;"
+    enctype="multipart/form-data" onsubmit="return validateForm()">
+    <div class="mb-3" style="width: 15rem;">
+      <label for="fileID" class="contactUpload" id="showFileName">
+        Upload Contacts <img src="/static/assets/images/f.png" alt="fe" style="width: 22px;">
+      </label>
+      <input class="form-control w-50" name="file" id="fileID" type="file"
+        accept=".xlsx, .xls, .csv, .xlsm, .xlsb, .ods, .xml, .html, .txt, .pdf, .dbf, .sylk" value=""
+        onchange="displayFileName()">
+    </div>
+    <div class="buttons" style="margin-left: -78px; padding: 3px;">
+      <!-- <button type="submit" class="button-12" id="uploadContactsButtons" style="background-color: white; color: black;margin-left: 19px; padding: -1px;">Upload</button> -->
+      <p style="text-align: center; background: red;color: white;width: 60%;margin: auto;   border-radius: 3px;"
+        id="cetegoryErrorMsg"></p>
+    </div>
+  </form>
+  <a href="/Group_management" id="GroupMNgBtn" class="button-12"
+    style="text-decoration: none; height: 30px; margin-top: 10px; background-color: white; color: black;width: 279px;">Group management</a>
+  <button id="addContactButton" style="width: 163px;
+        margin: 11px 34px 33px 20px;;
+    ;">Add Contact</button>
+</div>
+
+
+<!-- Button to open the modal -->
 
                 <div class="row">
                   <!-- <div class="GroupErrorMessage" style="display: flex; justify-content: center;align-items: center;"> -->
@@ -491,12 +553,62 @@
     }
   }
 
-</script>
-    <script>
+
       window.history.pushState(null, null, window.location.href);
       window.onpopstate = function () {
         window.history.pushState(null, null, window.location.href);
       };
+
+
+  // Get the button and modal elements
+  const addContactButton = document.getElementById('addContactButton');
+  const addContactModal = document.getElementById('addContactModal');
+
+  // Show the modal when the button is clicked
+  addContactButton.addEventListener('click', function() {
+    addContactModal.style.display = 'block';
+  });
+
+  // Function to close the modal
+  function closeAddContactModal() {
+    addContactModal.style.display = 'none';
+  }
+
+  const addContactForm = document.getElementById('addContactForm');
+
+  // Add event listener for form submission
+  addContactForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Get the entered data
+    const contactName = document.getElementById('contactName').value;
+    const contactNumber = document.getElementById('contactNumber').value;
+
+    // Here, you can send the data to your schema via AJAX or any other method
+    // For example:
+    fetch('/uploadContact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name: contactName, mobile: contactNumber })
+    })
+    .then(response => {
+      if (response.ok) {
+        // Data submitted successfully, you can close the modal or show a success message
+        closeAddContactModal();
+        // Optionally, you can reload the page to update the contact list
+        window.location.reload();
+      } else {
+        throw new Error('Failed to add contact');
+      }
+    })
+    .catch(error => {
+      console.error('Error adding contact:', error);
+      // Handle error, show error message, etc.
+    });
+  });
+
     </script>
   </body>
   <%- include('partials/scripts.ejs') %>

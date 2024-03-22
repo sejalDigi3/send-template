@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron mt-5">
+        <div class="col-sm-8 mx-auto">
+          <h1 class="text-center">ADD TICKET</h1>
+        </div>
+        <form
+          enctype="multipart/form-data"
+          novalidate
+          action="/addTicket"
+          method="post"
+        >
+          <div>
+            <label for="name" class="mx-3"><p>Ticket Name</p></label>
+            <input
+              type="text"
+              id="name"
+              class="mx-2"
+              placeholder="Enter ticket name"
+              value="<%= name %>"
+              name="name"
+              required
+            />
+          </div>
+          <br />
+          <div>
+            <label for="content" class="mx-3"><p>Content</p></label>
+            <textarea
+              id="content"
+              name="content"
+              class="mx-4"
+              rows="2"
+              styles="<%= {} %>"
+              placeholder="Enter content"
+              value="<%= content %>"
+              required
+            ></textarea>
+          </div>
+          <br />
+          <div>
+            <label for="messages" class="mx-3">Message</label>
+            <textarea
+              id="messages"
+              class="mx-3"
+              name="messages"
+              rows="2"
+              class="mx-3"
+              placeholder="Enter Message"
+              value="<%= messages.text %>"
+              required
+            ></textarea>
+          </div>
+          <br />
+          <div class="previewComponent">
+            <form action="/upload" method="post">
+              <input
+                class="fileInput"
+                type="file"
+                name="img"
+                onchange="this.form.submit()"
+              />
+            </form>
+          </div>
+          <br />
+          <div>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

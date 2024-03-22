@@ -13,7 +13,7 @@ const { ObjectId } = require("mongodb");
 const bodyParser = require("body-parser"); // Make sure to include body-parser
 router.use(bodyParser.json());
 // const languages = require('..');
-
+const bcrypt = require("bcryptjs");
 const languages = require('../views/data/languages.json');
 router.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -27,6 +27,7 @@ const {
   campaignsSchema,
   campaignHistory,
   Subscription,
+  Ticket
 } = require("../model/schema");
 
 //Role
@@ -145,9 +146,6 @@ router.delete('/deleteCampaign/:id', async (req, res) => {
   }
 });
 
-
-
-
 router.post("/update/:id", async (req, res) => {
   try {
     const userId = req.params.id;
@@ -253,7 +251,6 @@ router.post("/updateRole/:userId", async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 });
-
 
 //Group_management
 router.get("/Group_management", auth, async (req, res) => {
@@ -908,7 +905,6 @@ router.get("/detaildcampaignHistory", auth, async (req, res) => {
   }
 });
 
-
 //setting
 router.get("/setting", auth, async (req, res) => {
   try {
@@ -920,6 +916,7 @@ router.get("/setting", auth, async (req, res) => {
     console.log(`here is the error ${error}`);
   }
 });
+
 router.post("/saveAPICredentials", auth, async (req, res) => {
   try {
     const userEmail = req.body.userEmail; // Assuming userEmail is already available
@@ -1084,8 +1081,6 @@ router.get("/viewAllTemplates", auth, (req, res) => {
     res.status(500).send("internal server Error");
   }
 });
-
-
 
 router.get("/viewAllreports", auth, (req, res) => {
   try {
@@ -1517,20 +1512,6 @@ router.post('/sendtemplateMessages', upload.single('extractExcel'), auth, async 
 
 // CRUD Operations
 
-// Create a new subscription
-router.post('/subscriptions', async (req, res) => {
-  try {
-    const { name, description, price, duration } = req.body;
-    const newSubscription = new Subscription({ name, description, price, duration });
-    await newSubscription.save();
-    res.status(201).send(newSubscription);
-  } catch (error) {
-    console.error('Error creating subscription:', error);
-    res.status(500).send('Failed to create subscription');
-  }
-});
-
-
 
 
 router.get("/campaignHistory", auth, async (req, res) => {
@@ -1543,49 +1524,42 @@ router.get("/campaignHistory", auth, async (req, res) => {
   }
 });
 
+// // Read all subscriptions
+// router.get('/helpsupport', async (req, res) => {
+//   try {
+//     const subscriptions = await Subscription.find();
+
+//     res.render("Subscriptions", { subscriptions });
+//   } catch (error) {
+//     console.error('Error fetching subscriptions:', error);
+//     res.status(500).send('Failed to fetch subscriptions');
+//   }
+// });
 
 
-// Read all subscriptions
-router.get('/subscriptions', async (req, res) => {
+// Handle POST request to upload a contact
+router.post('/uploadContact', async (req, res) => {
   try {
-    const subscriptions = await Subscription.find();
+    const { name, mobile } = req.body;
 
-    res.render("Subscriptions", { subscriptions });
+    // Create a new contact object
+    const newContact = new NumberModel({
+      name,
+      mobile
+    });
+
+    // Save the contact to the database
+    await newContact.save();
+
+    // Send a success response
+    res.status(200).send('Contact added successfully');
   } catch (error) {
-    console.error('Error fetching subscriptions:', error);
-    res.status(500).send('Failed to fetch subscriptions');
+    // Handle error
+    console.error('Error adding contact:', error);
+    res.status(500).send('Error adding contact');
   }
 });
 
-// Update a subscription by ID
-router.put('/subscriptions/:id', async (req, res) => {
-  try {
-    const { name, description, price, duration } = req.body;
-    const updatedSubscription = await Subscription.findByIdAndUpdate(
-      req.params.id,
-      { name, description, price, duration },
-      { new: true }
-    );
-    res.status(200).send(updatedSubscription);
-  } catch (error) {
-    console.error('Error updating subscription:', error);
-    res.status(500).send('Failed to update subscription');
-  }
-});
-
-// Delete a subscription by ID
-router.delete('/subscriptions/:id', async (req, res) => {
-  try {
-    const deletedSubscription = await Subscription.findByIdAndDelete(req.params.id);
-    if (!deletedSubscription) {
-      return res.status(404).send('Subscription not found');
-    }
-    res.status(200).send('Subscription deleted successfully');
-  } catch (error) {
-    console.error('Error deleting subscription:', error);
-    res.status(500).send('Failed to delete subscription');
-  }
-});
 
 // router.get("/templateMsgHistory", auth, async (req, res) => {
 //   const ITEMS_PER_PAGE = 5; // Number of items to display per page
@@ -1817,3 +1791,139 @@ router.delete('/subscriptions/:id', async (req, res) => {
 //     res.status(500).send('Error sending messages');
 //   }
 // });
+
+// Handle POST request to upload a contact
+app.post('/uploadContact', async (req, res) => {
+  try {
+    const { name, mobile } = req.body;
+
+    // Create a new contact object
+    const newContact = new Contact({
+      name,
+      mobile
+    });
+
+    // Save the contact to the database
+    await newContact.save();
+
+    // Send a success response
+    res.status(200).send('Contact added successfully');
+  } catch (error) {
+    // Handle error
+    console.error('Error adding contact:', error);
+    res.status(500).send('Error adding contact');
+  }
+});
+
+router.post('/change-password', async (req, res) => {
+  const userId = '65e2c189696522966abd1520';
+  const { oldPassword, newPassword, confirmPassword } = req.body;
+
+  // // Retrieve the current user's ID from session or token
+  // const userId = req.session.userId; // Example: using session
+
+  try {
+    // Retrieve the user from the database
+    const user = await alluserOfourPanel.findById(userId);
+    console.log("here", user);
+    // Check if the old password matches
+    const isPasswordMatch = await bcrypt.compare(oldPassword, user.userpassword);
+    if (!isPasswordMatch) {
+      return res.status(400).json({ error: 'Invalid old password' });
+    }
+
+    // Check if the new password and confirm password match
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ error: 'New password and confirm password do not match' });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password in the database
+    user.userpassword = hashedPassword;
+    await user.save();
+
+    res.status(200).json({ message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('Error changing password:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.get("/campaignHistory", auth, async (req, res) => {
+  try {
+    const campaignhistory = await campaignHistory.find({});
+    console.log(campaignhistory);
+    res.render("campaignHistory", { campaignhistory });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+//help & support
+router.get("/support", async (req, res) => {
+  const supporthistory = await Ticket.find({});
+  console.log(supporthistory);
+  res.render("support", { supporthistory });
+});
+
+router.post('/addtickets', async (req, res) => {
+  try {
+    const { content, messages } = req.body;
+    const newTicket = new Ticket({ content, messages });
+    await newTicket.save();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.put('/helpsupport/:id', async (req, res) => {
+  try {
+    const { content, messages } = req.body;
+    const updatedTicket = await Ticket.findByIdAndUpdate(
+      req.params.id,
+      { content, messages },
+      { new: true }
+    );
+    res.status(200).send(updatedTicket);
+  } catch (error) {
+    console.error('Error updating Ticket:', error);
+    res.status(500).send('Failed to update Ticket');
+  }
+});
+
+router.delete('/helpsupport/:id', async (req, res) => {
+  try {
+    const deletedTicket = await Ticket.findByIdAndDelete(req.params.id);
+    if (!deletedTicket) {
+      return res.status(404).send('Ticket not found');
+    }
+    res.status(200).send('Ticket deleted successfully');
+  } catch (error) {
+    console.error('Error deleting Ticket:', error);
+    res.status(500).send('Failed to delete Ticket');
+  }
+});
+
+router.post('/addreply/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reply } = req.body;
+    const supportTicket = await Ticket.findById(id);
+    if (supportTicket) {
+      supportTicket.reply = reply;
+      const updatedTicket = await supportTicket.save();
+      res.status(200).json({ message: 'Reply added successfully', updatedTicket });
+    } else {
+      res.status(404).json({ error: 'Support ticket not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
+

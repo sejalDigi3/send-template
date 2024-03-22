@@ -231,8 +231,35 @@ const subscriptionSchema = new mongoose.Schema({
   duration: String,
 });
 
+
+// Ticket Schema
+const TicketSchema = new mongoose.Schema({
+  name: {
+    type: String
+  },
+  content: {
+    type: String
+  },
+  messages: {
+    type: String
+  },
+  status: {
+    type: Number,
+    default: 0
+  },
+  img: {
+    type: String
+  },
+  reply: {
+    type: String,
+    default: "no"
+  }
+}, { timestamps: true });
+
+
 // Subscription Model
 const Subscription = mongoose.model('Subscription', subscriptionSchema);
+const Ticket = mongoose.model('TicketSchema', TicketSchema);
 const templateMsg = new mongoose.model('templateMsg', templateSchema);
 const alluserOfourPanel = new mongoose.model('alluserOfourPanel', usersSchema);
 const customMessageContent = new mongoose.model('customMessage', customMsgSchema)
@@ -252,5 +279,6 @@ module.exports = {
   campaignsSchema,
   campaignHistory,
   User,
-  Subscription
+  Subscription,
+  Ticket
 };

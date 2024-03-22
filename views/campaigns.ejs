@@ -1,7 +1,5 @@
 <%- include('partials/head.ejs') %>
-
 <body>
-
   <style>
     .parentContainerOfAllchild {
       min-height: 100%;
@@ -66,18 +64,6 @@
                        white-space: normal;
                        word-wrap: break-word;
                    }
-        .search-container {
-            margin-bottom: 20px;
-        }
-
-        .search-container input[type="text"] {
-            width: 100%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
 #UniqueDesignForModal{
   width: 50%;
   margin: auto;
@@ -131,19 +117,82 @@
       margin: 0 5px;
       padding: 5px 10px;
       border-radius: 5px;
-      background-color: #007bff;
+      background-color: #11550b;
       color: #fff;
       border: none;
       cursor: pointer;
     }
 
     .pagination button:hover {
-      background-color: #0056b3;
+      background-color: #30a76b;
     }
 
-  /* modal design */
-  </style>
+    /* Add styles for search input */
+    .search-container {
+      margin-bottom: 10px;
+    }
 
+    .search-container input[type=text] {
+      padding: 5px;
+      margin-right: 5px;
+      width: 200px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .search-container button {
+      padding: 5px 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .search-container button:hover {
+      background-color: #45a049;
+    }
+        .search-container {
+      margin-bottom: 10px;
+    }
+
+    .search-container input[type=text] {
+      padding: 5px;
+      margin-right: 5px;
+      width: 200px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .search-container button {
+      padding: 5px 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .search-container button:hover {
+      background-color: #45a049;
+    }
+    #searchInput {
+    padding: 57px -34px 9px 86px;
+    width: 294px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+.search-container input[type=text] {
+    padding: 5px;
+    margin-right: 5px;
+    width: 303px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+  </style>
   <div class="container-scroller">
     <%- include('partials/navbar.ejs') %>
     <div class="container-fluid page-body-wrapper">
@@ -172,11 +221,14 @@
                   <!-- <a href="/detaildcampaignHistory">Click here</a> -->
                   <h1></h1>
 
-                  <input type="search" style="float: right;" onkeyup="searchHere()" id="searchInput" name="q"
-                    placeholder="Search...." aria-label="Search">
+
                   <div class="containPaginationINfo"></div>
-                                    <!-- <input type="text" id="searchInput" placeholder="Search for campaign..."> -->
-                  <table class="table">
+
+                  <table class="table" id="campaignsTable">
+                            <!-- Add search container -->
+        <div class="search-container">
+          <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for campaign names..">
+        </div>
                     <thead>
                       <tr>
                         <th>Campaign Name</th>
@@ -210,6 +262,16 @@
                       <% } %>
                     </tbody>
                   </table>
+
+
+
+<!-- Add pagination HTML -->
+<div class="pagination">
+  <button onclick="prevPage()">Previous</button>
+  <button onclick="nextPage()">Next</button>
+</div>
+
+
                 </div>
               </div>
             </div>
@@ -221,13 +283,10 @@
                     <div class="card">
                       <h2 class="text-center mt-5">Campaign Details</h2>
                       <div class="card-body">
-
-
-
-                                <!-- Search container -->
-                                <div class="search-container">
-                                    <input type="text" id="searchInput" placeholder="Search for campaign...">
-                                </div>
+                            <!-- Add search container for campaign details history table -->
+        <!-- <div class="search-container">
+          <input type="text" id="searchInput2" onkeyup="searchTable2()" placeholder="Search for campaign details..">
+        </div> -->
 
                         <div class="containPaginationINfo">
                           <!-- <h3>Message Has Been Sent</h3> -->
@@ -235,8 +294,11 @@
 
                         <div class="table-container">
                                  <p>Click on the file and Group name to see the phone numbers and name</p>
-                            <table class="table">
-                                <!-- style="background-color: lightgray;" -->
+                            <table class="table" id="campaignDetailsTable">
+      <div class="search-container">
+          <input type="text" id="searchInput2" onkeyup="searchTable2()" placeholder="Search for campaign details..">
+        </div>
+
                                 <thead>
                                     <tr>
                                         <th>Index</th>
@@ -278,13 +340,21 @@
                                 </tbody>
                             </table>
                           </div>
-
+    <!-- Pagination for the second table -->
+    <div class="pagination" id="pagination2">
+        <button onclick="prevPage2()">Previous</button>
+        <button onclick="nextPage2()">Next</button>
+    </div>
                       </div>
                      </div>
                   </div>
                   </div>
+          </div>
+      </div>
+      </div>
+  </div>
 
-                    </body>
+</body>
   <script>
   function redirectToSendCampaign(phoneOfTemp, messageType) {
       if (messageType === 'custom') {
@@ -313,50 +383,6 @@
   }
 }
 
-   function searchHere() {
-      var input, filter, table, tr, td, i;
-      input = document.getElementById("searchInput");
-      filter = input.value.toUpperCase();
-      table = document.querySelector(".table");
-      tr = table.getElementsByTagName("tr");
-      for (i = 0; i < tr.length; i++) {
-        var found = false;
-        for (var j = 0; j < tr[i].cells.length; j++) {
-          td = tr[i].cells[j];
-          if (td) {
-            if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-              found = true;
-            }
-          }
-        }
-        if (found) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
-        }
-      }
-    }
-
-   function filterTable() {
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("searchInput");
-        filter = input.value.toUpperCase();
-        table = document.querySelector(".table");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[1]; // Change index to the column you want to search
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
-        }
-    }
-
-    document.getElementById("searchInput").addEventListener("keyup", filterTable);
 
     function openModal(name) {
         var modal = document.getElementById('myModal');
@@ -376,55 +402,141 @@
         }
     };
 
-    function filterTable() {
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("searchInput");
-        filter = input.value.toUpperCase();
-        table = document.querySelector(".table");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i <script tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[1]; // Change index to the column you want to search
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
+
+
+    function searchTable() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("searchInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("campaignsTable");
+      tr = table.getElementsByTagName("tr");
+
+      // Loop through all table rows, and hide those that don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0]; // Change index to match the column you want to search (0 for Campaign Name)
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
         }
+      }
     }
 
-    document.getElementById("searchInput").addEventListener("keyup", filterTable);
 
-     // Function to filter table rows based on search input
-  function searchTable(inputId, tableClass, columnIndex) {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById(inputId);
-    filter = input.value.toUpperCase();
-    table = document.querySelector(tableClass);
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td")[columnIndex]; // Get the specific column
-      if (td) {
-        txtValue = td.textContent || td.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
+    function searchTable2() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("searchInput2");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("campaignDetailsTable");
+      tr = table.getElementsByTagName("tr");
+
+      // Loop through all table rows, and hide those that don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1]; // Change index to match the column you want to search (1 for Campaign Name)
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
         }
+      }
+    }
+
+
+  // Define variables for pagination
+  var currentPage = 1;
+  var rowsPerPage = 2; // Number of rows to display per page
+
+  function prevPage() {
+    if (currentPage > 1) {
+    currentPage--;
+  displayRows();
+    }
+  }
+
+  function nextPage() {
+    var table = document.getElementById("campaignsTable");
+  var totalPages = Math.ceil(table.rows.length / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+  displayRows();
+    }
+  }
+
+  function displayRows() {
+    var table = document.getElementById("campaignsTable");
+  var rows = table.getElementsByTagName("tr");
+
+  // Calculate start and end index for current page
+  var startIndex = (currentPage - 1) * rowsPerPage;
+  var endIndex = startIndex + rowsPerPage;
+
+  // Loop through all rows and display or hide based on current page
+  for (var i = 0; i < rows.length; i++) {
+      if (i >= startIndex && i < endIndex) {
+    rows[i].style.display = "";
+      } else {
+    rows[i].style.display = "none";
       }
     }
   }
 
-  // Attach search function to search input's keyup event
-  document.getElementById("searchInputCampaigns").addEventListener("keyup", function() {
-    searchTable("searchInputCampaigns", ".table-campaigns", 0); // Search in the first column of campaigns table
-  });
+  // Call displayRows() when the page loads
+  window.onload = function() {
+    displayRows();
+  };
 
-  document.getElementById("searchInputCampaignDetails").addEventListener("keyup", function() {
-    searchTable("searchInputCampaignDetails", ".table-campaign-details", 1); // Search in the second column of campaign details table
-  });
+
+
+// Define variables for pagination of the second table
+var currentPage2 = 1;
+var rowsPerPage2 = 5; // Number of rows to display per page
+
+function prevPage2() {
+    if (currentPage2 > 1) {
+        currentPage2--;
+        displayRows2();
+    }
+}
+
+function nextPage2() {
+    var table = document.getElementById("campaignDetailsTable");
+    var totalPages = Math.ceil(table.rows.length / rowsPerPage2);
+    if (currentPage2 < totalPages) {
+        currentPage2++;
+        displayRows2();
+    }
+}
+
+function displayRows2() {
+    var table = document.getElementById("campaignDetailsTable");
+    var rows = table.getElementsByTagName("tr");
+
+    // Calculate start and end index for current page
+    var startIndex = (currentPage2 - 1) * rowsPerPage2;
+    var endIndex = startIndex + rowsPerPage2;
+
+    // Loop through all rows and display or hide based on current page
+    for (var i = 0; i < rows.length; i++) {
+        if (i >= startIndex && i < endIndex) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+}
+
+// Call displayRows2() when the page loads
+window.onload = function() {
+    displayRows2();
+};
 
 </script>
 </html>

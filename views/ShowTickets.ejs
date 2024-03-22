@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron mt-5">
+        <div class="col-sm-8 mx-auto">
+          <% if (role === 1) { %>
+          <h1 class="text-center">ADMIN PAGE<br />TICKETS</h1>
+          <form action="/tickets" method="get">
+            <button
+              type="submit"
+              name="status"
+              value="0"
+              class="mx-1 btn btn-primary"
+            >
+              Opening
+            </button>
+            <button
+              type="submit"
+              name="status"
+              value="1"
+              class="mx-1 btn btn-danger"
+            >
+              Waiting
+            </button>
+            <button
+              type="submit"
+              name="status"
+              value="2"
+              class="mx-1 btn btn-success"
+            >
+              Closed
+            </button>
+            <button type="submit" class="mx-1 btn btn-dark">ALL</button>
+          </form>
+          <input
+            style="float: right"
+            value="<%= search %>"
+            placeholder="Search TicketName"
+            type="text"
+            onchange="this.form.submit()"
+          />
+          <% } else { %>
+          <h1 class="text-center">USER PAGE<br />TICKETS</h1>
+          <% } %>
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>TicketName</th>
+                <th>Content</th>
+                <th>Image</th>
+                <th>Message</th>
+                <th>Status</th>
+                <% if (role === 1) { %>
+                <th>Change Status</th>
+                <% } %>
+                <th>Add Message</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% data.forEach(function(row, index) { %>
+              <tr>
+                <td><%= row.name %></td>
+                <td><%= row.content %></td>
+                <td>
+                  <a
+                    target="_parent"
+                    href="http://localhost:5000/public/<%= row.img %>"
+                    ><img
+                      width="100px"
+                      src="http://localhost:5000/public/<%= row.img %>"
+                  /></a>
+                </td>
+                <% row.messages.forEach(function(message) { %>
+                <td><%= message.text %><br /></td>
+                <% }) %>
+                <td>
+                  <% switch (row.status) { %> <% case 0: %>
+                  <span class="badge badge-primary">Opening</span>
+                  <% break; %> <% case 1: %>
+                  <span class="badge badge-danger">Waiting</span>
+                  <% break; %> <% case 2: %>
+                  <span class="badge badge-success">Closed</span>
+                  <% break; %> <% } %>
+                </td>
+                <% if (role === 1) { %>
+                <td>
+                  <div class="dropdown">
+                    <button
+                      class="btn btn-sm btn-success dropdown-toggle"
+                      type="button"
+                      id="dropdownMenuButton"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      Change Status
+                    </button>
+                    <div
+                      class="dropdown-menu"
+                      aria-labelledby="dropdownMenuButton"
+                    >
+                      <a
+                        class="dropdown-item"
+                        href="/changeStatus?id=<%= row._id %>&status=0"
+                        >Opening</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        href="/changeStatus?id=<%= row._id %>&status=1"
+                        >Waiting</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        href="/changeStatus?id=<%= row._id %>&status=2"
+                        >Closed</a
+                      >
+                    </div>
+                  </div>
+                </td>
+                <% } %>
+                <td>
+                  <button
+                    name="addButton"
+                    class="btn btn-sm btn-primary"
+                    onclick="document.getElementById('<%= row._id %>').style.display='block'"
+                  >
+                    Add Message
+                  </button>
+                  <div id="<%= row._id %>" class="modal">
+                    <div class="modal-content">
+                      <span
+                        onclick="document.getElementById('<%= row._id %>').style.display='none'"
+                        class="close"
+                        >&times;</span
+                      >
+                      <form action="/addMessage" method="post">
+                        <label>
+                          Message:
+                          <input
+                            type="text"
+                            name="message"
+                            value="<%= message %>"
+                          />
+                        </label>
+                        <button type="submit">Add Message</button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
