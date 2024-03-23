@@ -4,11 +4,118 @@
 <body>
 
   <style>
+
+    /* CSS for centering the modal */
+.modal {
+  display: none; /* Hide the modal by default */
+  position: fixed; /* Position the modal relative to the viewport */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scrolling if needed */
+  background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered horizontally */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Set the width of the modal */
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Styling for the ticket details */
+#ticketNumber {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+#ticketContent,
+#ticketMessage {
+  margin-bottom: 10px;
+}
+
+/* Styling for the reply box */
+#replyBox {
+  border-top: 1px solid #ccc;
+  margin-top: 20px;
+  padding-top: 10px;
+}
+
+#ticketReply {
+  font-style: italic;
+  color: #555;
+}
+
+/* Optional: Style for scrollbar */
+.modal-content {
+  overflow-y: auto;
+}
+
+/* Optional: Style for mobile responsiveness */
+@media only screen and (max-width: 768px) {
+  .modal-content {
+    width: 90%; /* Adjust width for smaller screens */
+    margin: 10% auto; /* Adjust margin for smaller screens */
+  }
+}
+
+
+
+
     .parentContainerOfAllchild {
       min-height: 100%;
       background: white;
     }
+  /* CSS for centering the modal */
+  .modal {
+    display: none; /* Hide the modal by default */
+    position: fixed; /* Position the modal relative to the viewport */
 
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scrolling if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered horizontally */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Set the width of the modal */
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
     .buttonsSection {
       justify-content: space-between;
       display: flex;
@@ -54,6 +161,25 @@
     border-radius: 13px;
     padding: 6px;
     }
+
+.admin-message {
+  background-color: #7cedc2; /* Change this color to the desired background color for admin messages */
+  border: 1px solid;
+  border-radius: 13px;
+  padding: 6px;
+}
+.f
+{
+  font-size: larger;
+  width: bold;
+}
+/* Styling for user message */
+.user-message {
+  background-color: #ed7c7c; /* Change this color to the desired background color for user messages */
+  border: 1px solid;
+  border-radius: 13px;
+  padding: 6px;
+}
   </style>
 
   <div class="container-scroller">
@@ -121,10 +247,14 @@
     </tr>
   </thead>
   <tbody>
-    <% supporthistory.forEach(subscription => { %>
+     <% supporthistory.forEach((subscription, index) => { %>
 
 <tr>
-  <td><%= subscription._id.toString().substr(-4).toUpperCase() %></td>
+  <!-- <td><%= subscription._id.toString().substr(-4).toUpperCase() %></td> -->
+  <!-- <td><%= (parseInt(subscription._id.toString().substr(-4)) + 1).toString().padStart(4, '0').toUpperCase() %></td> -->
+   <!-- <td><%= String(index + 1).padStart(4, '0') %></td> -->
+   <td class="ticket-number-cell"><%= String(index + 1).padStart(4, '0') %></td>
+
   <td><%= subscription.content %></td>
   <td><%= subscription.messages %></td>
 
@@ -166,6 +296,19 @@
   </tbody>
 </table>
 
+<!-- Modal HTML -->
+
+<div id="ticketModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <p id="ticketNumber" hidden></p>
+    <p id="ticketContent" class="f"></p>
+    <p id="ticketMessage" class="user-message"></p>
+    <div id="replyBox">
+      <p id="ticketReply" class="admin-message"></p>
+    </div>
+  </div>
+</div>
                 </div>
               </div>
             </div>
@@ -177,6 +320,54 @@
   </div>
 
   <script>
+
+
+  function openModal(ticketNumber,ticketId) {
+    var modal = document.getElementById("ticketModal");
+    var ticketNumberElement = document.getElementById("ticketNumber");
+  var ticketContentElement = document.getElementById("ticketContent");
+  var ticketMessageElement = document.getElementById("ticketMessage");
+ var ticketReplyElement = document.getElementById("ticketReply");
+
+    // Set the ticket number in the modal content
+    ticketNumberElement.textContent = "Ticket Number: " + ticketNumber;
+
+  // Find the corresponding row in the table
+  var rowIndex = parseInt(ticketNumber) - 1; // Adjusting for zero-based indexing
+  var tableRow = document.querySelectorAll(".table tbody tr")[rowIndex];
+
+  // Get the content and message from the row
+  var ticketContent = tableRow.querySelector("td:nth-child(2)").textContent;
+  var ticketMessage = tableRow.querySelector("td:nth-child(3)").textContent;
+  var ticketReply = tableRow.querySelector(".chat-reply div:nth-child(2)").textContent;
+  // Set the content and message in the modal
+  ticketContentElement.textContent = "Ticket : " + ticketContent;
+  ticketMessageElement.textContent = "User Message: " + ticketMessage;
+  ticketReplyElement.textContent = "Admin Reply: " + ticketReply;
+  // Display the modal
+  modal.style.display = "block";
+  }
+
+  // Function to close the modal
+  function closeModal() {
+    var modal = document.getElementById("ticketModal");
+    modal.style.display = "none";
+  }
+
+  // Add a click event listener to all ticket number cells
+  var ticketNumberCells = document.querySelectorAll(".ticket-number-cell");
+  ticketNumberCells.forEach(function(cell) {
+    cell.addEventListener("click", function() {
+      // Fetch the ticket number from the clicked row
+      var ticketNumber = cell.textContent.trim();
+
+      // Open the modal with the ticket number
+      openModal(ticketNumber);
+    });
+  });
+
+
+
     // Function to add ticket
     function addTicket() {
       // Submit the form when the button is clicked

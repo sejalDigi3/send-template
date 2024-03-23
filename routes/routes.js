@@ -1868,6 +1868,21 @@ router.get("/support", async (req, res) => {
   res.render("support", { supporthistory });
 });
 
+// Get a particular ticket by ID
+router.get('/subscriptionDetails/:id', async (req, res) => {
+  try {
+    const ticketId = req.params.id;
+    const ticket = await Ticket.findById(ticketId);
+    if (!ticket) {
+      return res.status(404).json({ error: 'Ticket not found' });
+    }
+    res.render("support", { ticket });
+  } catch (error) {
+    console.error('Error fetching Ticket:', error);
+    res.status(500).json({ error: 'Failed to fetch Ticket' });
+  }
+});
+
 router.post('/addtickets', async (req, res) => {
   try {
     const { content, messages } = req.body;
@@ -1923,6 +1938,74 @@ router.post('/addreply/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+
+//subscription
+router.get("/subscription", async (req, res) => {
+  const subscriptionhistory = await Subscription.find({});
+  console.log(subscriptionhistory);
+  res.render("subscription", { subscriptionhistory });
+});
+
+router.get('/findsubscriptionDetails/:id', async (req, res) => {
+  try {
+    const subscriptionId = req.params.id;
+    const subscription = await Subscription.findById(subscriptionId);
+    if (!subscription) {
+      return res.status(404).json({ error: 'subscription not found' });
+    }
+    console.log("here", subscription);
+    // res.render("support", { subscription });
+  } catch (error) {
+    console.error('Error fetching subscription:', error);
+    res.status(500).json({ error: 'Failed to fetch subscription' });
+  }
+});
+
+router.post('/addsubscriptions', async (req, res) => {
+  try {
+    console.log("addsubscriptions");
+    const { name, description, price, duration } = req.body;
+    console.log(req.body);
+    const newsubscription = new Subscription({ name, description, price, duration });
+    await newsubscription.save();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.put('/subscription/:id', async (req, res) => {
+  try {
+    const { name, description, price, duration } = req.body;
+    const updatedsubscription = await Subscription.findByIdAndUpdate(
+      req.params.id,
+      { name, description, price, duration },
+      { new: true }
+    );
+    res.status(200).send(updatedsubscription);
+  } catch (error) {
+    console.error('Error updating subscription:', error);
+    res.status(500).send('Failed to update subscription');
+  }
+});
+
+router.delete('/subscription/:id', async (req, res) => {
+  try {
+    const deletedsubscription = await Subscription.findByIdAndDelete(req.params.id);
+    if (!deletedsubscription) {
+      return res.status(404).send('subscription not found');
+    }
+    res.status(200).send('subscription deleted successfully');
+  } catch (error) {
+    console.error('Error deleting subscription:', error);
+    res.status(500).send('Failed to delete subscription');
+  }
+});
+
+
+
 
 
 
